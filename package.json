@@ -4,7 +4,8 @@
   "description": "Clean Architecture API that implemented with NodeJS and Express. This projects implements a api for a blog",
   "main": "src/server.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:staged": "jest"
   },
   "keywords": [
     "clean architecture",
