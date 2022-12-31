@@ -1,0 +1,16 @@
+{
+  "name": "blog-api",
+  "version": "1.0.0",
+  "description": "Clean Architecture API that implemented with NodeJS and Express. This projects implements a api for a blog",
+  "main": "src/server.js",
+  "scripts": {},
+  "keywords": [
+    "clean architecture",
+    "nodejs",
+    "tdd",
+    "express",
+    "sequelize"
+  ],
+  "author": "Bruno Silveira",
+  "license": "ISC"
+}
