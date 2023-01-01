@@ -1,3 +1,4 @@
+import { MissingParamError } from '../errors/missing-param-error'
 import { HttpRequest, HttpResponse } from '../protocols/http'
 
 export class SignUpController {
@@ -8,12 +9,10 @@ export class SignUpController {
     for (const field of requiredFields) {
       const responseError = {
         statusCode: 400,
-        body: new Error(`Missing param: ${field}`)
+        body: new MissingParamError(field)
       }
 
-      const missingRequiredFiled = !body[field]
-
-      if (missingRequiredFiled) {
+      if (!body[field]) {
         return responseError
       }
     }
