@@ -22,7 +22,7 @@ const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
     add (account: AddAccountModel): AccountModel {
       return {
-        id: '1',
+        id: 'lorem_ipsum_id',
         name: 'Lorem Ipsum',
         email: 'loremipsum@email.com',
         password: 'loremipsum123@#'
@@ -245,5 +245,29 @@ describe('SignUpController Tests', () => {
 
     expect(statusCode).toBe(500)
     expect(body).toEqual(expectedError)
+  })
+
+  it('should return 200 if valid body passed to add-account', () => {
+    const { sut } = makeSut()
+
+    const httpRequest = {
+      body: {
+        name: 'Lorem Ipsum',
+        email: 'loremipsum@email.com',
+        password: 'loremipsum123@#',
+        passwordConfirm: 'loremipsum123@#'
+      }
+    }
+
+    const { statusCode, body } = sut.handle(httpRequest)
+
+    expect(statusCode).toBe(200)
+
+    expect(body).toEqual({
+      id: 'lorem_ipsum_id',
+      name: 'Lorem Ipsum',
+      email: 'loremipsum@email.com',
+      password: 'loremipsum123@#'
+    })
   })
 })
