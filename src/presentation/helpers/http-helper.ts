@@ -5,9 +5,9 @@ export const makeBadRequest = (error: Error): HttpResponse => ({
   body: error
 })
 
-export const makeOKRequest = (): HttpResponse => ({
+export const makeOKRequest = (body: any): HttpResponse => ({
   statusCode: 200,
-  body: {}
+  body
 })
 
 export const makeInternalServerError = (error: Error): HttpResponse => ({
