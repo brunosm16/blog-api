@@ -162,4 +162,24 @@ describe('SignUpController Tests', () => {
     expect(statusCode).toBe(500)
     expect(body).toEqual(expectedError)
   })
+
+  it('should returns 400 if password does not match', () => {
+    const { sut } = makeSut()
+
+    const httpRequest = {
+      body: {
+        name: 'Lorem Ipsum',
+        email: 'loremipsum@email.com',
+        password: 'loremipsum123@#',
+        passwordConfirm: 'liquam eleifend mi in nulla'
+      }
+    }
+
+    const expectedError = new InvalidParamError('passwordConfirm')
+
+    const { statusCode, body } = sut.handle(httpRequest)
+
+    expect(statusCode).toBe(400)
+    expect(body).toEqual(expectedError)
+  })
 })
