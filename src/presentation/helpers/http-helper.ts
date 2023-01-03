@@ -1,3 +1,4 @@
+import { ServerError } from '../errors'
 import { HttpResponse } from '../protocols/http'
 
 export const makeBadRequest = (error: Error): HttpResponse => ({
@@ -10,7 +11,7 @@ export const makeOKRequest = (body: any): HttpResponse => ({
   body
 })
 
-export const makeInternalServerError = (error: Error): HttpResponse => ({
+export const makeInternalServerError = (): HttpResponse => ({
   statusCode: 500,
-  body: error
+  body: new ServerError()
 })
