@@ -20,13 +20,15 @@ const makeEmailValidator = (): EmailValidator => {
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    add (account: AddAccountModel): AccountModel {
-      return {
+    async add (account: AddAccountModel): Promise<AccountModel> {
+      const mockAccount = {
         id: 'lorem_ipsum_id',
         name: 'Lorem Ipsum',
         email: 'loremipsum@email.com',
         password: 'loremipsum123@#'
       }
+
+      return await new Promise((resolve) => resolve(mockAccount))
     }
   }
 
