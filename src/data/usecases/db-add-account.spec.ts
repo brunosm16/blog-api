@@ -27,7 +27,7 @@ const makeAddAccountRepositoryStub = (): AddAccountRepository => {
         id: 'fake-id',
         name: 'lorem-ipsum',
         email: 'loremipsum@email.com',
-        password: 'loremipsum123@#'
+        password: 'fake_hashed_password'
       }
 
       return await new Promise((resolve) => resolve(fakeAccount))
@@ -121,6 +121,25 @@ describe('DBAddAccount Tests', () => {
 
     expect(addAccountRepositorySpy).toHaveBeenCalledWith({
       ...fakeAccount,
+      password: 'fake_hashed_password'
+    })
+  })
+
+  it('should return account on db-account success', async () => {
+    const { sut } = makeSut()
+
+    const fakeAccount = {
+      name: 'lorem-ipsum',
+      email: 'loremipsum@email.com',
+      password: 'loremipsum123@#'
+    }
+
+    const account = await sut.add(fakeAccount)
+
+    expect(account).toEqual({
+      id: 'fake-id',
+      name: 'lorem-ipsum',
+      email: 'loremipsum@email.com',
       password: 'fake_hashed_password'
     })
   })
