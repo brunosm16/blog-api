@@ -86,6 +86,26 @@ describe('DBAddAccount Tests', () => {
     await expect(promise).rejects.toThrow()
   })
 
+  it('should throws if add-account-repository throws', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut()
+
+    jest
+      .spyOn(addAccountRepositoryStub, 'add')
+      .mockReturnValueOnce(
+        new Promise((resolve, reject) => reject(new Error()))
+      )
+
+    const fakeAccount = {
+      name: 'lorem-ipsum',
+      email: 'loremipsum@email.com',
+      password: 'loremipsum123@#'
+    }
+
+    const promise = sut.add(fakeAccount)
+
+    await expect(promise).rejects.toThrow()
+  })
+
   it('should add-account-repository with correct values', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
 
