@@ -16,8 +16,12 @@ describe('MongoAccountRepository Tests', () => {
     await accountCollection.deleteMany({})
   })
 
+  const makeSut = (): MongoAccountRepository => {
+    return new MongoAccountRepository()
+  }
+
   it('should return a account when insert is successful', async () => {
-    const sut = new MongoAccountRepository()
+    const sut = makeSut()
 
     const fakeAccount = {
       id: 'fake-id',
