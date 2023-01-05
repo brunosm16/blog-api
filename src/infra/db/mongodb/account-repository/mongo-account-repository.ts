@@ -9,8 +9,6 @@ export class MongoAccountRepository implements AddAccountRepository {
 
     const { ops } = await collection.insertOne(addAccount)
 
-    const { _id, ...insertedWithNoId } = ops[0]
-
-    return Object.assign({}, { ...insertedWithNoId }, { id: _id })
+    return MongoHelper.map(ops[0])
   }
 }
