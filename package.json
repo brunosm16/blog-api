@@ -4,6 +4,7 @@
   "description": "Clean Architecture Blog API implemented with NodeJS and Express.",
   "main": "src/server.js",
   "scripts": {
+    "start": "sucrase-node src/main/server.ts",
     "test": "jest --passWithNoTests --silent --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
