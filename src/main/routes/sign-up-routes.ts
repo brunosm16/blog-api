@@ -1,7 +1,7 @@
-import { Express } from 'express'
+import { Router } from 'express'
 
-export default (app: Express): void => {
-  app.post('/signup', (req, res) => {
+export default (router: Router): void => {
+  router.post('/signup', (req, res) => {
     res.json({ ok: 'ok' })
   })
 }
