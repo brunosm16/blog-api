@@ -4,7 +4,14 @@ import { Controller, HttpRequest } from '../../presentation/protocols'
 const makeHttpRequest = (body: any): HttpRequest => ({ body })
 
 const sendResponse = (statusCode: number, body: any, res: Response): void => {
-  res.status(statusCode).json(body)
+  if (statusCode === 200) {
+    res.status(statusCode).json(body)
+    return
+  }
+
+  res.status(statusCode).json({
+    error: body?.message
+  })
 }
 
 export const adaptRoute = (controller: Controller) => {
