@@ -1,6 +1,11 @@
 import { Collection } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { LogMongoRepository } from './log-mongo-repository'
+import { LogErrorRepository } from '../../../../data/protocols/log-error-repository'
+
+const makeSut = (): LogErrorRepository => {
+  return new LogMongoRepository()
+}
 
 describe('LogMongoRepository Tests', () => {
   let errorCollection: Collection
@@ -20,7 +25,7 @@ describe('LogMongoRepository Tests', () => {
   })
 
   it('should inserts a error log', async () => {
-    const sut = new LogMongoRepository()
+    const sut = makeSut()
 
     await sut.logError('fake_stack_error')
 
