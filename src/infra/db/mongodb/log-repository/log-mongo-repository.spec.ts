@@ -26,6 +26,6 @@ describe('LogMongoRepository Tests', () => {
 
     const errors = await errorCollection.countDocuments()
 
-    expect(errors).toEqual(1)
+    expect(errors).toBe(1)
   })
 })
