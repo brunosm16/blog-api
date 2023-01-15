@@ -19,17 +19,23 @@ const createServerError = (stack: string): HttpResponse => {
   return makeInternalServerError(error)
 }
 
+const getFakeResponse = (): HttpResponse => ({
+  statusCode: 200,
+  body: {
+    ok: 'ok'
+  }
+})
+
+const getFakeRequest = (): HttpRequest => ({
+  body: {
+    ok: 'ok'
+  }
+})
+
 const makeControllerStub = (): Controller => {
   class ControllerStub implements Controller {
     async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-      const httpResponse: HttpResponse = {
-        statusCode: 200,
-        body: {
-          ok: 'ok'
-        }
-      }
-
-      return await new Promise((resolve) => resolve(httpResponse))
+      return await new Promise((resolve) => resolve(getFakeResponse()))
     }
   }
 
@@ -62,15 +68,11 @@ describe('LogControllerDecorator Tests', () => {
   it('calls controller with correct http-request values', async () => {
     const { sut, controllerStub } = makeSut()
 
-    const httpRequest = {
-      body: {
-        ok: 'ok'
-      }
-    }
+    const httpRequest = getFakeRequest()
 
     const handleSpy = jest.spyOn(controllerStub, 'handle')
 
-    await sut.handle(httpRequest)
+    await sut.handle(getFakeRequest())
 
     expect(handleSpy).toHaveBeenCalledWith(httpRequest)
   })
@@ -78,20 +80,8 @@ describe('LogControllerDecorator Tests', () => {
   it('should return the same response as controller', async () => {
     const { sut } = makeSut()
 
-    const httpRequest = {
-      body: {
-        ok: 'ok'
-      }
-    }
-
-    const response = await sut.handle(httpRequest)
-
-    expect(response).toEqual({
-      statusCode: 200,
-      body: {
-        ok: 'ok'
-      }
-    })
+    const response = await sut.handle(getFakeRequest())
+    expect(response).toEqual(getFakeResponse())
   })
 
   it('should call log-error-repository with correct error if controller returns a server error', async () => {
@@ -107,13 +97,7 @@ describe('LogControllerDecorator Tests', () => {
       .spyOn(controllerStub, 'handle')
       .mockReturnValueOnce(new Promise((resolve) => resolve(serverError)))
 
-    const httpRequest = {
-      body: {
-        ok: 'ok'
-      }
-    }
-
-    await sut.handle(httpRequest)
+    await sut.handle(getFakeRequest())
 
     expect(logSpy).toHaveBeenCalledWith(stackMock)
   })
