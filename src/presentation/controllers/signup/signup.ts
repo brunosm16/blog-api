@@ -41,7 +41,7 @@ export class SignUpController implements Controller {
 
       return makeOKRequest(accountResult)
     } catch (err) {
-      return makeInternalServerError()
+      return makeInternalServerError(err)
     }
   }
 }

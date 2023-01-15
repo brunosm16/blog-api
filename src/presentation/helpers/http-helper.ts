@@ -11,7 +11,7 @@ export const makeOKRequest = (body: any): HttpResponse => ({
   body
 })
 
-export const makeInternalServerError = (): HttpResponse => ({
+export const makeInternalServerError = (error: Error): HttpResponse => ({
   statusCode: 500,
-  body: new ServerError()
+  body: new ServerError(error?.stack)
 })
