@@ -23,7 +23,7 @@ export class SignUpController implements Controller {
         }
       }
 
-      const { name, email, password, passwordConfirm } = httpRequest.body
+      const { name, email, password, passwordConfirm } = body
 
       const invalidPasswords = password !== passwordConfirm
 
