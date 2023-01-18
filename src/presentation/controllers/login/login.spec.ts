@@ -3,6 +3,7 @@ import { InvalidParamError, MissingParamError } from '../../errors'
 import {
   makeBadRequest,
   makeInternalServerError,
+  makeOKRequest,
   makeUnauthorizedError
 } from '../../helpers/http-helper'
 import { HttpRequest } from '../../protocols'
@@ -147,5 +148,13 @@ describe('LoginController Tests', () => {
     const response = await sut.handle(getFakeRequest())
 
     expect(response).toEqual(makeUnauthorizedError())
+  })
+
+  it('should return 200 if user allowed', async () => {
+    const { sut } = makeSut()
+
+    const response = await sut.handle(getFakeRequest())
+
+    expect(response).toEqual(makeOKRequest({ accessToken: 'fake_token' }))
   })
 })
