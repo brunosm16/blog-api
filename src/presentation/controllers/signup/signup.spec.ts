@@ -12,11 +12,13 @@ import {
   makeInternalServerError,
   makeOKRequest
 } from '../../helpers/http-helper'
+import { Validation } from '../../helpers/validation'
 
 interface SutTypes {
   sut: SignUpController
   emailValidatorStub: EmailValidator
   addAccountStub: AddAccount
+  validationStub: Validation
 }
 
 const getFakeAccount = (): AccountModel => ({
@@ -62,12 +64,27 @@ const makeAddAccount = (): AddAccount => {
   return new AddAccountStub()
 }
 
+const makeValidation = (): Validation => {
+  class ValidationStub implements Validation {
+    validate (input: any): Error | null {
+      return null
+    }
+  }
+
+  return new ValidationStub()
+}
+
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator()
   const addAccountStub = makeAddAccount()
-  const sut = new SignUpController(emailValidatorStub, addAccountStub)
+  const validationStub = makeValidation()
+  const sut = new SignUpController(
+    emailValidatorStub,
+    addAccountStub,
+    validationStub
+  )
 
-  return { sut, emailValidatorStub, addAccountStub }
+  return { sut, emailValidatorStub, addAccountStub, validationStub }
 }
 
 describe('SignUpController Tests', () => {
@@ -220,5 +237,17 @@ describe('SignUpController Tests', () => {
 
     const httpResponse = await sut.handle(getFakeRequest())
     expect(httpResponse).toEqual(makeOKRequest(getFakeAccount()))
+  })
+
+  it('should call Validation with correct values', async () => {
+    const { sut, validationStub } = makeSut()
+
+    const validateSpy = jest.spyOn(validationStub, 'validate')
+
+    const httpRequest = getFakeRequest()
+
+    await sut.handle(httpRequest)
+
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 })
