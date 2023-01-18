@@ -1,4 +1,4 @@
-import { MissingParamError, InvalidParamError } from '../../errors'
+import { InvalidParamError } from '../../errors'
 import {
   makeBadRequest,
   makeInternalServerError,
@@ -36,14 +36,6 @@ export class SignUpController implements Controller {
 
       if (error) {
         return makeBadRequest(error)
-      }
-
-      const requiredFields = ['name', 'email', 'password', 'passwordConfirm']
-
-      for (const field of requiredFields) {
-        if (!body[field]) {
-          return makeBadRequest(new MissingParamError(field))
-        }
       }
 
       const { name, email, password, passwordConfirm } = body
