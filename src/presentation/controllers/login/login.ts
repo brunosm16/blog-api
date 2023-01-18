@@ -43,7 +43,7 @@ export class LoginController implements Controller {
         return makeUnauthorizedError()
       }
 
-      return makeOKRequest({})
+      return makeOKRequest({ accessToken })
     } catch (err) {
       return makeInternalServerError(err)
     }
