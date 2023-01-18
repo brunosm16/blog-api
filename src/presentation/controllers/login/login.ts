@@ -3,7 +3,8 @@ import { InvalidParamError, MissingParamError } from '../../errors'
 import {
   makeBadRequest,
   makeInternalServerError,
-  makeOKRequest
+  makeOKRequest,
+  makeUnauthorizedError
 } from '../../helpers/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '../../protocols'
 import { EmailValidator } from '../signup/signup-protocols'
@@ -36,7 +37,11 @@ export class LoginController implements Controller {
         return makeBadRequest(new InvalidParamError('email'))
       }
 
-      await this.authentication.auth(email, password)
+      const accessToken = await this.authentication.auth(email, password)
+
+      if (!accessToken) {
+        return makeUnauthorizedError()
+      }
 
       return makeOKRequest({})
     } catch (err) {
