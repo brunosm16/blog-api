@@ -254,7 +254,7 @@ describe('SignUpController Tests', () => {
   it('should returns 400 if validation fails', async () => {
     const { sut, validationStub } = makeSut()
 
-    const fakeError = new Error('fake_error')
+    const fakeError = new MissingParamError('fake_param_missing')
 
     jest.spyOn(validationStub, 'validate').mockReturnValueOnce(fakeError)
 
