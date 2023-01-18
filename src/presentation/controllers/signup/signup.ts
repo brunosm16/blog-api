@@ -32,7 +32,11 @@ export class SignUpController implements Controller {
     try {
       const { body } = httpRequest
 
-      this.validation.validate(body)
+      const error = this.validation.validate(body)
+
+      if (error) {
+        return makeBadRequest(error)
+      }
 
       const requiredFields = ['name', 'email', 'password', 'passwordConfirm']
 
