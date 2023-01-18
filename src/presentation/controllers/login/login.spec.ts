@@ -2,7 +2,8 @@ import { Authentication } from '../../../domain/usecases/authentication'
 import { InvalidParamError, MissingParamError } from '../../errors'
 import {
   makeBadRequest,
-  makeInternalServerError
+  makeInternalServerError,
+  makeUnauthorizedError
 } from '../../helpers/http-helper'
 import { HttpRequest } from '../../protocols'
 import { EmailValidator } from '../signup/signup-protocols'
@@ -26,7 +27,7 @@ const makeEmailValidatorStub = (): EmailValidator => {
 
 const makeAuthenticationStub = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (email: string, password: string): Promise<string> {
+    async auth (email: string, password: string): Promise<string | null> {
       return await new Promise((resolve) => resolve('fake_token'))
     }
   }
@@ -134,5 +135,17 @@ describe('LoginController Tests', () => {
     await sut.handle(request)
 
     expect(authSpy).toHaveBeenCalledWith(email, password)
+  })
+
+  it('should return 401 if user not allowed', async () => {
+    const { sut, authenticationStub } = makeSut()
+
+    jest
+      .spyOn(authenticationStub, 'auth')
+      .mockReturnValueOnce(new Promise((resolve) => resolve(null)))
+
+    const response = await sut.handle(getFakeRequest())
+
+    expect(response).toEqual(makeUnauthorizedError())
   })
 })
