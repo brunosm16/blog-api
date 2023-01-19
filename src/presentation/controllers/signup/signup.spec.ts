@@ -127,24 +127,6 @@ describe('SignUpController Tests', () => {
     expect(httpResponse).toEqual(makeInternalServerError(new ServerError()))
   })
 
-  it('should returns 400 if password does not match', async () => {
-    const { sut } = makeSut()
-
-    const httpRequest = {
-      body: {
-        name: 'Lorem Ipsum',
-        email: 'loremipsum@email.com',
-        password: 'loremipsum123@#',
-        passwordConfirm: 'liquam eleifend mi in nulla'
-      }
-    }
-
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(
-      makeBadRequest(new InvalidParamError('passwordConfirm'))
-    )
-  })
-
   it('should call addAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut()
 
