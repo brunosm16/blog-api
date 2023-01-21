@@ -1,3 +1,4 @@
+import { AuthenticationModel } from '../../../domain/models/authentication'
 import { MissingParamError } from '../../errors'
 import {
   makeBadRequest,
@@ -19,7 +20,7 @@ interface SutTypes {
 
 const makeAuthenticationStub = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (email: string, password: string): Promise<string | null> {
+    async auth (authentication: AuthenticationModel): Promise<string | null> {
       return await new Promise((resolve) => resolve('fake_token'))
     }
   }
@@ -68,7 +69,7 @@ describe('LoginController Tests', () => {
 
     await sut.handle(request)
 
-    expect(authSpy).toHaveBeenCalledWith(email, password)
+    expect(authSpy).toHaveBeenCalledWith({ email, password })
   })
 
   it('should return 401 if user not allowed', async () => {
