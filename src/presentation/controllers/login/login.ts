@@ -7,7 +7,7 @@ import {
   makeUnauthorizedError
 } from '../../helpers/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '../../protocols'
-import { EmailValidator } from '../signup/signup-protocols'
+import { EmailValidator } from '../../protocols/email-validator'
 
 export class LoginController implements Controller {
   private readonly emailValidator: EmailValidator

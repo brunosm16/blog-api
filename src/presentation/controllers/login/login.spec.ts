@@ -7,7 +7,7 @@ import {
   makeUnauthorizedError
 } from '../../helpers/http-helper'
 import { HttpRequest } from '../../protocols'
-import { EmailValidator } from '../signup/signup-protocols'
+import { EmailValidator } from '../../protocols/email-validator'
 import { LoginController } from './login'
 
 interface SutTypes {
