@@ -1,7 +1,9 @@
 import { Validation } from '../../presentation/helpers/validation'
 import { CompareFieldsValidation } from '../../presentation/helpers/validators/compare-fields-validation'
+import { EmailFieldValidation } from '../../presentation/helpers/validators/email-field-validation'
 import { RequiredFieldValidation } from '../../presentation/helpers/validators/required-field-validation'
 import { ValidationComposite } from '../../presentation/helpers/validators/validation-composite'
+import { EmailValidatorAdapter } from '../../utils/email-validator-adapter'
 
 const requiredFields = ['name', 'email', 'password', 'passwordConfirm']
 
@@ -13,6 +15,10 @@ const getValidationsArray = (): Validation[] => {
   }
 
   validations.push(new CompareFieldsValidation('password', 'passwordConfirm'))
+
+  validations.push(
+    new EmailFieldValidation('email', new EmailValidatorAdapter())
+  )
 
   return validations
 }
