@@ -1,5 +1,5 @@
 import { LogErrorRepository } from '../../data/protocols/log-error-repository'
-import { makeInternalServerError } from '../../presentation/helpers/http-helper'
+import { makeInternalServerError } from '../../presentation/helpers/http/http-helper'
 import {
   Controller,
   HttpRequest,

@@ -2,8 +2,8 @@ import {
   makeBadRequest,
   makeInternalServerError,
   makeOKRequest
-} from '../../helpers/http-helper'
-import { Validation } from '../../helpers/validation'
+} from '../../helpers/http/http-helper'
+import { Validation } from '../../helpers/validators/validation'
 import {
   HttpRequest,
   HttpResponse,
