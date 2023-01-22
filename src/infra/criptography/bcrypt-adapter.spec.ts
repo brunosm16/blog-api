@@ -9,13 +9,19 @@ const makeSut = (salt = 12): BcryptAdapter => {
   return sut
 }
 
+const mockBCrypt = {
+  compare: async (): Promise<boolean> => {
+    return await new Promise((resolve) => resolve(true))
+  }
+}
+
 jest.mock('bcrypt', () => ({
   async hash (value: string): Promise<string> {
     return await new Promise((resolve) => resolve(FAKE_HASH))
   },
 
   async compare (password: string, hashedPassword: string): Promise<boolean> {
-    return await new Promise((resolve) => resolve(true))
+    return await mockBCrypt.compare()
   }
 }))
 
@@ -59,5 +65,20 @@ describe('BcryptAdapter Tests', () => {
     const isValid = await sut.compare(fakePassword, fakeHash)
 
     expect(isValid).toEqual(true)
+  })
+
+  it('should returns false when comparison fails', async () => {
+    const fakePassword = 'loremipsum123@#'
+    const fakeHash = 'b@8gFygS63Pa'
+
+    const sut = makeSut(12)
+
+    jest
+      .spyOn(mockBCrypt, 'compare')
+      .mockReturnValueOnce(new Promise((resolve) => resolve(false)))
+
+    const isValid = await sut.compare(fakePassword, fakeHash)
+
+    expect(isValid).toEqual(false)
   })
 })
