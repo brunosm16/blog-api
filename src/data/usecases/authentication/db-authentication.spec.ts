@@ -1,4 +1,5 @@
 import { AuthenticationModel } from '../../../domain/models/authentication'
+import { HashComparer } from '../../protocols/cryptography/hash-comparer'
 import { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
 import { AccountModel } from '../add-account/db-add-account-protocols'
 import { DbAuthentication } from './db-authentication'
@@ -6,6 +7,7 @@ import { DbAuthentication } from './db-authentication'
 interface SutTypes {
   sut: DbAuthentication
   loadAccountByEmailStub: LoadAccountByEmailRepository
+  hashComparerStub: HashComparer
 }
 
 const getFakeAccount = (): AccountModel => ({
@@ -30,13 +32,25 @@ const makeLoadAccountByEmail = (): LoadAccountByEmailRepository => {
   return new LoadAccountByEmailStub()
 }
 
+const makeHashComparer = (): HashComparer => {
+  class HashComparerStub implements HashComparer {
+    async compare (password: string, hash: string): Promise<boolean> {
+      return await new Promise((resolve) => resolve(true))
+    }
+  }
+
+  return new HashComparerStub()
+}
+
 const makeSut = (): SutTypes => {
   const loadAccountByEmailStub = makeLoadAccountByEmail()
-  const sut = new DbAuthentication(loadAccountByEmailStub)
+  const hashComparerStub = makeHashComparer()
+  const sut = new DbAuthentication(loadAccountByEmailStub, hashComparerStub)
 
   return {
     sut,
-    loadAccountByEmailStub
+    loadAccountByEmailStub,
+    hashComparerStub
   }
 }
 describe('DbAuthentication', () => {
@@ -60,5 +74,18 @@ describe('DbAuthentication', () => {
     const result = await sut.auth(getFakeAuthentication())
 
     expect(result).toEqual(null)
+  })
+
+  it('should call db-authentication with correct values', async () => {
+    const { sut, hashComparerStub } = makeSut()
+
+    const compareSpy = jest.spyOn(hashComparerStub, 'compare')
+
+    await sut.auth(getFakeAuthentication())
+
+    const { password } = getFakeAuthentication()
+    const { password: hashedPassword } = getFakeAccount()
+
+    expect(compareSpy).toHaveBeenCalledWith(password, hashedPassword)
   })
 })
