@@ -40,4 +40,20 @@ describe('MongoAccountRepository Tests', () => {
     expect(accountResult.email).toEqual(email)
     expect(accountResult.password).toEqual(password)
   })
+
+  it('should return an account on load-by-email success', async () => {
+    const sut = makeSut()
+
+    await sut.add(getFakeAccount())
+
+    const { name, email, password } = getFakeAccount()
+
+    const accountResult = await sut.loadByEmail(email)
+
+    expect(accountResult).toBeTruthy()
+    expect(accountResult?.id).toBeTruthy()
+    expect(accountResult?.name).toEqual(name)
+    expect(accountResult?.email).toEqual(email)
+    expect(accountResult?.password).toEqual(password)
+  })
 })
