@@ -21,4 +21,12 @@ describe('JwtAdapter', () => {
 
     expect(signSpy).toHaveBeenCalledWith({ id: 'fake_password' }, 'fake_secret')
   })
+
+  it('should return a accessToken on sign success', async () => {
+    const sut = makeSut()
+
+    const accessToken = await sut.encrypt('fake_password')
+
+    expect(accessToken).toEqual('fake_token')
+  })
 })
