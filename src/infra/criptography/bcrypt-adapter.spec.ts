@@ -21,7 +21,7 @@ describe('BcryptAdapter Tests', () => {
     const fakePassword = 'loremipsum123@#'
 
     const sut = makeSut(12)
-    await sut.encrypt(fakePassword)
+    await sut.hash(fakePassword)
 
     expect(hashSpy).toHaveBeenCalledWith(fakePassword, 12)
   })
@@ -30,7 +30,7 @@ describe('BcryptAdapter Tests', () => {
     const fakePassword = 'loremipsum123@#'
 
     const sut = makeSut(12)
-    const resultHash = await sut.encrypt(fakePassword)
+    const resultHash = await sut.hash(fakePassword)
 
     expect(resultHash).toEqual(FAKE_HASH)
   })

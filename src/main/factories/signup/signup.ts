@@ -10,11 +10,11 @@ import { makeSignUpValidation } from './signup-validation'
 
 const makeAddAccount = (): AddAccount => {
   const salt = 12
-  const encrypter = new BcryptAdapter(salt)
+  const hasher = new BcryptAdapter(salt)
 
   const mongoAccountRepository = new MongoAccountRepository()
 
-  return new DbAddAccount(encrypter, mongoAccountRepository)
+  return new DbAddAccount(hasher, mongoAccountRepository)
 }
 
 export const makeSignUpController = (): Controller => {
