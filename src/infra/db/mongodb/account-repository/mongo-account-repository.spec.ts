@@ -56,4 +56,12 @@ describe('MongoAccountRepository Tests', () => {
     expect(accountResult?.email).toEqual(email)
     expect(accountResult?.password).toEqual(password)
   })
+
+  it('should return null if on load-by-email fails', async () => {
+    const sut = makeSut()
+
+    const accountResult = await sut.loadByEmail('non-existent-email@email.com')
+
+    expect(accountResult).toBeFalsy()
+  })
 })
