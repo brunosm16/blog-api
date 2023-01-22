@@ -50,4 +50,14 @@ describe('BcryptAdapter Tests', () => {
 
     expect(compareSpy).toHaveBeenCalledWith(fakePassword, fakeHash)
   })
+
+  it('should returns true when comparison succeeds', async () => {
+    const fakePassword = 'loremipsum123@#'
+    const fakeHash = 'b@8gFygS63Pa'
+
+    const sut = makeSut(12)
+    const isValid = await sut.compare(fakePassword, fakeHash)
+
+    expect(isValid).toEqual(true)
+  })
 })
