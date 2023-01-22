@@ -118,4 +118,12 @@ describe('DbAuthentication', () => {
 
     expect(generateSpy).toHaveBeenCalledWith(id)
   })
+
+  it('should return a token on success', async () => {
+    const { sut } = makeSut()
+
+    const token = await sut.auth(getFakeAccount())
+
+    expect(token).toEqual('fake_token')
+  })
 })
