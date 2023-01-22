@@ -40,7 +40,7 @@ const makeSut = (): SutTypes => {
   }
 }
 describe('DbAuthentication', () => {
-  it('should call load-account-by-email repository', async () => {
+  it('should call load-account-by-email-repository', async () => {
     const { sut, loadAccountByEmailStub } = makeSut()
 
     const loadSpy = jest.spyOn(loadAccountByEmailStub, 'load')
