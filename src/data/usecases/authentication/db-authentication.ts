@@ -56,7 +56,7 @@ export class DbAuthentication implements Authentication {
     accessToken: string | null
   ): Promise<void> {
     if (id && accessToken) {
-      await this.updateAccessTokenRepository.update(id, accessToken)
+      await this.updateAccessTokenRepository.updateAccessToken(id, accessToken)
     }
   }
 
