@@ -1,5 +1,12 @@
+import { AddAccountModel } from '../../../../domain/usecases/add-account'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { MongoAccountRepository } from './mongo-account-repository'
+
+const getFakeAccount = (): AddAccountModel => ({
+  name: 'lorem-ipsum',
+  email: 'loremipsum@email.com',
+  password: 'loremipsum123@#'
+})
 
 describe('MongoAccountRepository Tests', () => {
   beforeAll(async () => {
@@ -23,19 +30,14 @@ describe('MongoAccountRepository Tests', () => {
   it('should return a account when insert is successful', async () => {
     const sut = makeSut()
 
-    const fakeAccount = {
-      id: 'fake-id',
-      name: 'lorem-ipsum',
-      email: 'loremipsum@email.com',
-      password: 'loremipsum123@#'
-    }
+    const accountResult = await sut.add(getFakeAccount())
 
-    const accountResult = await sut.add(fakeAccount)
+    const { name, email, password } = getFakeAccount()
 
     expect(accountResult).toBeTruthy()
     expect(accountResult.id).toBeTruthy()
-    expect(accountResult.name).toEqual(fakeAccount.name)
-    expect(accountResult.email).toEqual(fakeAccount.email)
-    expect(accountResult.password).toEqual(fakeAccount.password)
+    expect(accountResult.name).toEqual(name)
+    expect(accountResult.email).toEqual(email)
+    expect(accountResult.password).toEqual(password)
   })
 })
