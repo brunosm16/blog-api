@@ -5,7 +5,7 @@ import {
   HttpRequest,
   HttpResponse
 } from '../../presentation/protocols'
-import { LogControllerDecorator } from './log-controller'
+import { LogControllerDecorator } from './log-controller-decorator'
 
 interface SutTypes {
   sut: LogControllerDecorator

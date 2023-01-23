@@ -4,7 +4,7 @@ import { BcryptAdapter } from '../../../infra/criptography/bcrypt-adapter/bcrypt
 import { MongoAccountRepository } from '../../../infra/db/mongodb/account-repository/mongo-account-repository'
 import { AddAccount } from '../../../domain/usecases/add-account'
 import { Controller } from '../../../presentation/protocols'
-import { LogControllerDecorator } from '../../decorators/log-controller'
+import { LogControllerDecorator } from '../../decorators/log-controller-decorator'
 import { LogMongoRepository } from '../../../infra/db/mongodb/log-repository/log-mongo-repository'
 import { makeSignUpValidation } from './signup-factory-validation'
 
