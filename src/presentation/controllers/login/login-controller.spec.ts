@@ -9,8 +9,8 @@ import {
   HttpRequest,
   Validation,
   Authentication
-} from '../login/login-protocols'
-import { LoginController } from './login'
+} from './login-controller-protocols'
+import { LoginController } from './login-controller'
 
 interface SutTypes {
   sut: LoginController
