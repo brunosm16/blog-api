@@ -1,6 +1,6 @@
 {
   "name": "blog-api",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Clean Architecture Blog API implemented with NodeJS and Express.",
   "main": "src/server.js",
   "scripts": {
