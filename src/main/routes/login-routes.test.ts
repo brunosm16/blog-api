@@ -4,7 +4,7 @@ import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
 
 const SIGN_UP_URL = '/api/signup'
 
-describe('SignUp Route Tests', () => {
+describe('Login Route Tests', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL ?? '')
   })
