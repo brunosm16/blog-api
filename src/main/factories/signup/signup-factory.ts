@@ -6,7 +6,7 @@ import { AddAccount } from '../../../domain/usecases/add-account'
 import { Controller } from '../../../presentation/protocols'
 import { LogControllerDecorator } from '../../decorators/log-controller'
 import { LogMongoRepository } from '../../../infra/db/mongodb/log-repository/log-mongo-repository'
-import { makeSignUpValidation } from './signup-validation'
+import { makeSignUpValidation } from './signup-factory-validation'
 
 const makeAddAccount = (): AddAccount => {
   const salt = 12
