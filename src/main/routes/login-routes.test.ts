@@ -1,10 +1,13 @@
 import request from 'supertest'
+import { Collection } from 'mongodb'
 import app from '../config/app'
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
 
 const SIGN_UP_URL = '/api/signup'
 
 describe('Login Route Tests', () => {
+  let accountCollection: Collection
+
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL ?? '')
   })
@@ -14,9 +17,9 @@ describe('Login Route Tests', () => {
   })
 
   beforeEach(async () => {
-    const accounts = await MongoHelper.getCollectionByName('accounts')
+    accountCollection = await MongoHelper.getCollectionByName('accounts')
 
-    await accounts.deleteMany({})
+    await accountCollection.deleteMany({})
   })
 
   describe('POST /signup', () => {
