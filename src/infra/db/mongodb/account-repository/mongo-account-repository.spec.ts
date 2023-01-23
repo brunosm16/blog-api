@@ -1,3 +1,4 @@
+import { Collection } from 'mongodb'
 import { AddAccountModel } from '../../../../domain/usecases/add-account'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { MongoAccountRepository } from './mongo-account-repository'
@@ -9,6 +10,8 @@ const getFakeAccount = (): AddAccountModel => ({
 })
 
 describe('MongoAccountRepository Tests', () => {
+  let accountCollection: Collection
+
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL ?? '')
   })
@@ -18,7 +21,7 @@ describe('MongoAccountRepository Tests', () => {
   })
 
   beforeEach(async () => {
-    const accountCollection = await MongoHelper.getCollectionByName('accounts')
+    accountCollection = await MongoHelper.getCollectionByName('accounts')
 
     await accountCollection.deleteMany({})
   })
@@ -63,5 +66,25 @@ describe('MongoAccountRepository Tests', () => {
     const accountResult = await sut.loadByEmail('non-existent-email@email.com')
 
     expect(accountResult).toBeFalsy()
+  })
+
+  it('should update accessToken on updateAccessToken success', async () => {
+    const sut = makeSut()
+
+    let accountResult
+
+    const inserted = await accountCollection.insertOne(getFakeAccount())
+
+    accountResult = inserted.ops[0]
+    expect(accountResult.accessToken).toBeFalsy()
+
+    await sut.updateAccessToken(accountResult._id, 'fake_token')
+
+    accountResult = await accountCollection.findOne({
+      _id: accountResult._id
+    })
+
+    expect(accountResult).toBeTruthy()
+    expect(accountResult.accessToken).toEqual('fake_token')
   })
 })
