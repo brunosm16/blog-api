@@ -26,7 +26,7 @@ const makeDbAuthentication = (): DbAuthentication => {
   )
 }
 
-export const makeLoginFactory = (): Controller => {
+export const makeLoginController = (): Controller => {
   const loginController = new LoginController(
     makeLoginValidation(),
     makeDbAuthentication()
