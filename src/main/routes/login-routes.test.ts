@@ -19,14 +19,16 @@ describe('Login Route Tests', () => {
     await accounts.deleteMany({})
   })
 
-  it('should return statusCode 200 on success', async () => {
-    const body = {
-      name: 'Lorem Ipsum',
-      email: 'loremipsum@email.com',
-      password: 'loremispum123@#',
-      passwordConfirm: 'loremispum123@#'
-    }
+  describe('POST /signup', () => {
+    it('should return statusCode 200 on success', async () => {
+      const body = {
+        name: 'Lorem Ipsum',
+        email: 'loremipsum@email.com',
+        password: 'loremispum123@#',
+        passwordConfirm: 'loremispum123@#'
+      }
 
-    await request(app).post(SIGN_UP_URL).send(body).expect(200)
+      await request(app).post(SIGN_UP_URL).send(body).expect(200)
+    })
   })
 })
