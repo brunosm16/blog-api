@@ -5,7 +5,7 @@ import {
   RequiredFieldValidation,
   ValidationComposite
 } from '../../../presentation/helpers/validators'
-import { EmailValidatorAdapter } from '../../../utils/email-validator-adapter'
+import { EmailValidatorAdapter } from '../../adapter/validators/email-validator-adapter'
 
 const requiredFields = ['name', 'email', 'password', 'passwordConfirm']
 
