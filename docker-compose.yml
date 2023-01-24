@@ -1,0 +1,22 @@
+version: '3'
+services:
+  mongo:
+    container_name: mongodb-container
+    image: mongo:5.0.14
+    restart: always
+    volumes:
+      - ./data:/data/db
+    ports:
+      - '27017:27017'
+  api:
+    container_name: api-container
+    build: .
+    restart: always
+    image: blog-api
+    command: npm start
+    volumes: 
+      - ./dist:/usr/src/blog-api/dist
+    ports:
+      - "3000:3000"
+    links:
+      - mongo
