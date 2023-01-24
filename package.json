@@ -4,7 +4,9 @@
   "description": "Clean Architecture Blog API implemented with NodeJS and Express.",
   "main": "src/server.js",
   "scripts": {
-    "start": "sucrase-node src/main/server.ts",
+    "start": "node dist/main/server.js",
+    "build": "rimraf dist && tsc",
+    "dev": "sucrase-node src/main/server.ts",
     "test": "jest --passWithNoTests --silent --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
@@ -42,6 +44,7 @@
     "jest": "^29.3.1",
     "jsonwebtoken": "^9.0.0",
     "lint-staged": "^9.5.0",
+    "rimraf": "^4.1.2",
     "sucrase": "^3.29.0",
     "supertest": "^6.3.3",
     "ts-jest": "^29.0.3",
