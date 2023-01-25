@@ -22,13 +22,6 @@ interface SutTypes {
   authenticationStub: Authentication
 }
 
-const getFakeAccount = (): AccountModel => ({
-  id: 'lorem_ipsum_id',
-  name: 'Lorem Ipsum',
-  email: 'loremipsum@email.com',
-  password: 'loremipsum123@#'
-})
-
 const getFakeRequest = (): HttpRequest => ({
   body: {
     name: 'Lorem Ipsum',
@@ -119,7 +112,7 @@ describe('SignUpController Tests', () => {
     const { sut } = makeSut()
 
     const httpResponse = await sut.handle(getFakeRequest())
-    expect(httpResponse).toEqual(makeOKRequest(getFakeAccount()))
+    expect(httpResponse).toEqual(makeOKRequest({ accessToken: 'fake_token' }))
   })
 
   it('should call Validation with correct values', async () => {
