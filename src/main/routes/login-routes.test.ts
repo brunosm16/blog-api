@@ -36,6 +36,19 @@ describe('Login Route Tests', () => {
       }
 
       await request(app).post(SIGN_UP_URL).send(body).expect(200)
+      await request(app).post(SIGN_UP_URL).send(body).expect(403)
+    })
+
+    it('should return statusCode 403 on email already in use', async () => {
+      const body = {
+        name: 'Lorem Ipsum',
+        email: 'loremipsum@email.com',
+        password: 'loremispum123@#',
+        passwordConfirm: 'loremispum123@#'
+      }
+
+      await request(app).post(SIGN_UP_URL).send(body).expect(200)
+      await request(app).post(SIGN_UP_URL).send(body).expect(403)
     })
   })
 
