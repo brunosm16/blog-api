@@ -1,6 +1,7 @@
 import { AddPost } from './add-post'
 import { HttpRequest } from './add-post-protocols'
 import { Validation } from '../../../protocols/validation'
+import { makeBadRequest } from '../../../helpers/http/http-helper'
 
 interface SutTypes {
   sut: AddPost
@@ -51,5 +52,15 @@ describe('AddPost', () => {
     const { body: expectedBody } = getFakeRequest()
 
     expect(validateSpy).toHaveBeenCalledWith(expectedBody)
+  })
+
+  it('should return 400 if validate fails', async () => {
+    const { sut, validationStub } = makeSut()
+
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new Error())
+
+    const response = await sut.handle(getFakeRequest())
+
+    expect(response).toEqual(makeBadRequest(new Error()))
   })
 })
