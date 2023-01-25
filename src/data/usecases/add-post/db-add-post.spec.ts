@@ -21,7 +21,7 @@ const getFakePost = (): PostModel => ({
 
 const makeAddPostRepositoryStub = (): AddPostRepository => {
   class AddPostRepositoryStub implements AddPostRepository {
-    async add (addPost: AddPostModel): Promise<void> {
+    async add (postData: AddPostModel): Promise<void> {
       return await new Promise((resolve) => resolve())
     }
   }
