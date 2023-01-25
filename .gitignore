@@ -134,6 +134,7 @@ globalConfig.json
 
 ### Docker volumes
 data
+!src/data
 
 # VS Code Debug
 .vscode
