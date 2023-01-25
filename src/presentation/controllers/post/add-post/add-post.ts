@@ -1,4 +1,7 @@
-import { makeOKRequest } from '../../../helpers/http/http-helper'
+import {
+  makeBadRequest,
+  makeOKRequest
+} from '../../../helpers/http/http-helper'
 import {
   HttpRequest,
   HttpResponse,
@@ -12,7 +15,11 @@ export class AddPost implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     const { body } = httpRequest
 
-    await this.validation.validate(body)
+    const error = await this.validation.validate(body)
+
+    if (error) {
+      return makeBadRequest(new Error())
+    }
 
     return makeOKRequest(body)
   }
