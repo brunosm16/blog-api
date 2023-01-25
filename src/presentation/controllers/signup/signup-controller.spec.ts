@@ -4,10 +4,11 @@ import {
   AddAccountModel,
   HttpRequest
 } from './signup-controller-protocols'
-import { MissingParamError, ServerError } from '../../errors'
+import { MissingParamError, ServerError, EmailInUseError } from '../../errors'
 import { SignUpController } from './signup-controller'
 import {
   makeBadRequest,
+  makeForbiddenError,
   makeInternalServerError,
   makeOKRequest
 } from '../../helpers/http/http-helper'
@@ -33,7 +34,7 @@ const getFakeRequest = (): HttpRequest => ({
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    async add (account: AddAccountModel): Promise<AccountModel> {
+    async add (account: AddAccountModel): Promise<AccountModel | null> {
       const mockAccount = {
         id: 'lorem_ipsum_id',
         name: 'Lorem Ipsum',
@@ -149,5 +150,17 @@ describe('SignUpController Tests', () => {
     const { email, password } = getFakeRequest().body
 
     expect(authSpy).toHaveBeenCalledWith({ email, password })
+  })
+
+  it('should return 403 if add-account fails', async () => {
+    const { sut, addAccountStub } = makeSut()
+
+    jest
+      .spyOn(addAccountStub, 'add')
+      .mockReturnValueOnce(new Promise((resolve) => resolve(null)))
+
+    const response = await sut.handle(getFakeRequest())
+
+    expect(response).toEqual(makeForbiddenError(new EmailInUseError()))
   })
 })
