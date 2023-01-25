@@ -9,5 +9,5 @@ export interface PostAnswer {
 }
 
 export interface AddPost {
-  add: (addPostModel: AddPostModel) => Promise<void>
+  add: (postData: AddPostModel) => Promise<void>
 }
