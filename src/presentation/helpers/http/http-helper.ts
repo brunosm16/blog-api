@@ -20,3 +20,8 @@ export const makeUnauthorizedError = (): HttpResponse => ({
   statusCode: 401,
   body: new UnauthorizedError()
 })
+
+export const makeForbiddenError = (error: Error): HttpResponse => ({
+  statusCode: 403,
+  body: error
+})
