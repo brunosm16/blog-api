@@ -7,7 +7,7 @@ import { Controller } from '../../../presentation/protocols'
 import { LogControllerDecorator } from '../../decorators/log-controller-decorator'
 import { LogMongoRepository } from '../../../infra/db/mongodb/log-repository/log-mongo-repository'
 import { makeSignUpValidation } from './signup-factory-validation'
-import { makeDbAuthentication } from '../usecases/add-account/db-authentication-factory'
+import { makeDbAuthentication } from '../usecases/authentication/db-authentication-factory'
 
 const makeAddAccount = (): AddAccount => {
   const salt = 12
