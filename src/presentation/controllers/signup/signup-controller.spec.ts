@@ -12,11 +12,14 @@ import {
   makeOKRequest
 } from '../../helpers/http/http-helper'
 import { Validation } from '../../protocols/validation'
+import { Authentication } from '../login/login-controller-protocols'
+import { AuthenticationModel } from '../../../domain/models/authentication'
 
 interface SutTypes {
   sut: SignUpController
   addAccountStub: AddAccount
   validationStub: Validation
+  authenticationStub: Authentication
 }
 
 const getFakeAccount = (): AccountModel => ({
@@ -62,12 +65,27 @@ const makeValidation = (): Validation => {
   return new ValidationStub()
 }
 
+const makeAuthenticationStub = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth (authentication: AuthenticationModel): Promise<string | null> {
+      return await new Promise((resolve) => resolve('fake_token'))
+    }
+  }
+
+  return new AuthenticationStub()
+}
+
 const makeSut = (): SutTypes => {
   const addAccountStub = makeAddAccount()
   const validationStub = makeValidation()
-  const sut = new SignUpController(addAccountStub, validationStub)
+  const authenticationStub = makeAuthenticationStub()
+  const sut = new SignUpController(
+    addAccountStub,
+    validationStub,
+    authenticationStub
+  )
 
-  return { sut, addAccountStub, validationStub }
+  return { sut, addAccountStub, validationStub, authenticationStub }
 }
 
 describe('SignUpController Tests', () => {
@@ -126,5 +144,17 @@ describe('SignUpController Tests', () => {
     const response = await sut.handle(getFakeRequest())
 
     expect(response).toEqual(makeBadRequest(fakeError))
+  })
+
+  it('should call authentication with correct values', async () => {
+    const { sut, authenticationStub } = makeSut()
+
+    const authSpy = jest.spyOn(authenticationStub, 'auth')
+
+    await sut.handle(getFakeRequest())
+
+    const { email, password } = getFakeRequest().body
+
+    expect(authSpy).toHaveBeenCalledWith({ email, password })
   })
 })
