@@ -3,10 +3,10 @@ import { HttpRequest } from './add-post-controller-protocols'
 import { Validation } from '../../../protocols/validation'
 import {
   makeBadRequest,
-  makeInternalServerError
+  makeInternalServerError,
+  makeNoContentRequest
 } from '../../../helpers/http/http-helper'
 import { AddPost, AddPostModel } from '../../../../domain/usecases/add-post'
-import { PostModel } from '../../../../domain/models/post'
 
 interface SutTypes {
   sut: AddPostController
@@ -26,17 +26,6 @@ const getFakeRequest = (): HttpRequest => ({
   }
 })
 
-const getFakePost = (): PostModel => ({
-  id: 'fake_id',
-  question: 'fake_question',
-  answers: [
-    {
-      image: 'fake_image',
-      answer: 'fake_answer'
-    }
-  ]
-})
-
 const makeValidationStub = (): Validation => {
   class ValidationStub implements Validation {
     validate (input): Error | null {
@@ -49,8 +38,8 @@ const makeValidationStub = (): Validation => {
 
 const makeAddPostStub = (): AddPost => {
   class AddPostStub implements AddPost {
-    async add (addPostModel: AddPostModel): Promise<PostModel> {
-      return await new Promise((resolve) => resolve(getFakePost()))
+    async add (addPostModel: AddPostModel): Promise<void> {
+      return await new Promise((resolve) => resolve())
     }
   }
 
@@ -115,5 +104,13 @@ describe('AddPost', () => {
     const response = await sut.handle(getFakeRequest())
 
     expect(response).toEqual(makeInternalServerError(new Error()))
+  })
+
+  it('should return 201 on add-post success', async () => {
+    const { sut } = makeSut()
+
+    const response = await sut.handle(getFakeRequest())
+
+    expect(response).toEqual(makeNoContentRequest())
   })
 })
