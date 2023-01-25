@@ -1,5 +1,7 @@
+import { EmailInUseError } from '../../errors'
 import {
   makeBadRequest,
+  makeForbiddenError,
   makeInternalServerError,
   makeOKRequest
 } from '../../helpers/http/http-helper'
@@ -31,7 +33,11 @@ export class SignUpController implements Controller {
 
       const { name, email, password } = body
 
-      await this.addAccount.add({ name, email, password })
+      const account = await this.addAccount.add({ name, email, password })
+
+      if (!account) {
+        return makeForbiddenError(new EmailInUseError())
+      }
 
       const accessToken = await this.authentication.auth({ email, password })
 
