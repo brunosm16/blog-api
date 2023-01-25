@@ -25,3 +25,8 @@ export const makeForbiddenError = (error: Error): HttpResponse => ({
   statusCode: 403,
   body: error
 })
+
+export const makeNoContentRequest = (): HttpResponse => ({
+  statusCode: 204,
+  body: {}
+})

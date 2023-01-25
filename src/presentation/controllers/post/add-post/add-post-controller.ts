@@ -2,7 +2,7 @@ import { AddPost } from '../../../../domain/usecases/add-post'
 import {
   makeBadRequest,
   makeInternalServerError,
-  makeOKRequest
+  makeNoContentRequest
 } from '../../../helpers/http/http-helper'
 import {
   HttpRequest,
@@ -21,7 +21,7 @@ export class AddPostController implements Controller {
     try {
       const { body } = httpRequest
 
-      const error = await this.validation.validate(body)
+      const error = this.validation.validate(body)
 
       if (error) {
         return makeBadRequest(new Error())
@@ -31,7 +31,7 @@ export class AddPostController implements Controller {
 
       await this.addPost.add({ question, answers })
 
-      return makeOKRequest(body)
+      return makeNoContentRequest()
     } catch (err) {
       return makeInternalServerError(err)
     }
