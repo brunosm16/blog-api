@@ -11,7 +11,7 @@ describe('AddPostValidation | Factory', () => {
   it('should call validation-composite with correct validations', () => {
     makeAddPostValidation()
 
-    const requiredFields = ['questions', 'answers']
+    const requiredFields = ['question', 'answers']
 
     const validations: Validation[] = []
 

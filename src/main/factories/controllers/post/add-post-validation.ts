@@ -15,7 +15,7 @@ const getValidationsArray = (requiredFields: string[]): Validation[] => {
 }
 
 export const makeAddPostValidation = (): ValidationComposite => {
-  const requiredFields = ['questions', 'answers']
+  const requiredFields = ['question', 'answers']
   const validations = getValidationsArray(requiredFields)
 
   return new ValidationComposite(validations)
