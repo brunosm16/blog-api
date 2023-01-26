@@ -4,7 +4,7 @@ import { makeLogControllerDecorator } from '../../decorators/log-controller-deco
 import { makeDbAddPost } from '../../usecases/add-post/db-add-post-factory'
 import { makeAddPostValidation } from './add-post-validation'
 
-export const makeAddPostFactory = (): Controller => {
+export const makeAddPostController = (): Controller => {
   const addPostController = new AddPostController(
     makeAddPostValidation(),
     makeDbAddPost()
