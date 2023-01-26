@@ -4,7 +4,7 @@ import { Controller, HttpRequest } from '../../../presentation/protocols'
 const makeHttpRequest = (body: any): HttpRequest => ({ body })
 
 const sendResponse = (statusCode: number, body: any, res: Response): void => {
-  if (statusCode === 200) {
+  if (statusCode >= 200 || statusCode <= 299) {
     res.status(statusCode).json(body)
     return
   }
