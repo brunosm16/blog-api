@@ -4,7 +4,7 @@ export interface AddPostModel {
 }
 
 export interface PostAnswer {
-  image: string
+  image?: string
   answer: string
 }
 
