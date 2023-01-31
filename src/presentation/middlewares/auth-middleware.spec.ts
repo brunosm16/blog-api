@@ -1,7 +1,7 @@
 import { AccountModel } from '../../domain/models/account'
 import { LoadAccountByToken } from '../../domain/usecases/load-account-by-token'
 import { AccessDeniedError } from '../errors'
-import { makeForbiddenError } from '../helpers/http/http-helper'
+import { makeForbiddenError, makeOKRequest } from '../helpers/http/http-helper'
 import { HttpRequest } from '../protocols'
 import { AuthMiddleware } from './auth-middleware'
 
@@ -74,5 +74,13 @@ describe('Auth Middleware', () => {
     const response = await sut.handle({})
 
     expect(response).toEqual(makeForbiddenError(new AccessDeniedError()))
+  })
+
+  it('should return 200 if load-account-by-token succeeds', async () => {
+    const { sut } = makeSut()
+
+    const response = await sut.handle(makeFakeRequest())
+
+    expect(response).toEqual(makeOKRequest({ accountId: 'fake-id' }))
   })
 })
