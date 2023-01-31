@@ -10,19 +10,25 @@ import { HttpRequest, HttpResponse } from '../protocols'
 import { Middleware } from '../protocols/middleware'
 
 export class AuthMiddleware implements Middleware {
-  constructor (private readonly loadAccountByToken: LoadAccountByToken) {}
+  constructor (
+    private readonly loadAccountByToken: LoadAccountByToken,
+    private readonly role?: string
+  ) {}
 
-  async getAccount (accessToken: string): Promise<AccountModel | null> {
+  async getAccount (
+    accessToken: string,
+    role?: string
+  ): Promise<AccountModel | null> {
     if (!accessToken) return null
 
-    return await this.loadAccountByToken.load(accessToken)
+    return await this.loadAccountByToken.load(accessToken, role)
   }
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const accessToken = httpRequest?.headers?.['x-access-token']
 
-      const account = await this.getAccount(accessToken)
+      const account = await this.getAccount(accessToken, this?.role)
 
       if (account) {
         return makeOKRequest({ accountId: account.id })
