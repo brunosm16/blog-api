@@ -16,6 +16,8 @@ const makeDecrypterStub = (): Decrypter => {
   return new DecrypterStub()
 }
 
+const getFakeAccessToken = (): string => 'fake_access_token'
+
 const makeSut = (): SutTypes => {
   const decrypterStub = makeDecrypterStub()
   const sut = new DbLoadAccountByToken(decrypterStub)
@@ -35,5 +37,17 @@ describe('DbLoadAccountByToken', () => {
     await sut.load('fake_access_token')
 
     expect(decryptSpy).toHaveBeenCalledWith('fake_access_token')
+  })
+
+  it('should return null if decrypter returns null', async () => {
+    const { sut, decrypterStub } = makeSut()
+
+    jest
+      .spyOn(decrypterStub, 'decrypt')
+      .mockReturnValueOnce(new Promise((resolve) => resolve(null)))
+
+    const response = await sut.load(getFakeAccessToken())
+
+    expect(response).toEqual(null)
   })
 })
