@@ -1,10 +1,25 @@
 import { DbLoadAccountByToken } from './db-load-account-by-token'
-import { Decrypter } from './db-load-account-by-token-protocols'
+
+import {
+  LoadAccountByTokenRepository,
+  Decrypter,
+  AccountModel
+} from './db-load-account-by-token-protocols'
 
 interface SutTypes {
   sut: DbLoadAccountByToken
   decrypterStub: Decrypter
+  loadAccountByTokenRepositoryStub: LoadAccountByTokenRepository
 }
+
+const getFakeAccessToken = (): string => 'fake_access_token'
+
+const getFakeAccount = (): AccountModel => ({
+  id: 'fake-id',
+  name: 'lorem-ipsum',
+  email: 'loremipsum@email.com',
+  password: 'fake_hashed_password'
+})
 
 const makeDecrypterStub = (): Decrypter => {
   class DecrypterStub implements Decrypter {
@@ -16,15 +31,34 @@ const makeDecrypterStub = (): Decrypter => {
   return new DecrypterStub()
 }
 
-const getFakeAccessToken = (): string => 'fake_access_token'
+const makeLoadAccountByTokenRepositoryStub =
+  (): LoadAccountByTokenRepository => {
+    class LoadAccountByTokenRepositoryStub
+    implements LoadAccountByTokenRepository {
+      async loadByToken (
+        token: string,
+        role?: string
+      ): Promise<AccountModel | null> {
+        return await new Promise((resolve) => resolve(getFakeAccount()))
+      }
+    }
+
+    return new LoadAccountByTokenRepositoryStub()
+  }
 
 const makeSut = (): SutTypes => {
   const decrypterStub = makeDecrypterStub()
-  const sut = new DbLoadAccountByToken(decrypterStub)
+  const loadAccountByTokenRepositoryStub =
+    makeLoadAccountByTokenRepositoryStub()
+  const sut = new DbLoadAccountByToken(
+    decrypterStub,
+    loadAccountByTokenRepositoryStub
+  )
 
   return {
     sut,
-    decrypterStub
+    decrypterStub,
+    loadAccountByTokenRepositoryStub
   }
 }
 
@@ -34,7 +68,7 @@ describe('DbLoadAccountByToken', () => {
 
     const decryptSpy = jest.spyOn(decrypterStub, 'decrypt')
 
-    await sut.load('fake_access_token')
+    await sut.load(getFakeAccessToken())
 
     expect(decryptSpy).toHaveBeenCalledWith('fake_access_token')
   })
@@ -49,5 +83,18 @@ describe('DbLoadAccountByToken', () => {
     const response = await sut.load(getFakeAccessToken())
 
     expect(response).toEqual(null)
+  })
+
+  it('should call load-account-by-token-repository with correct value', async () => {
+    const { sut, loadAccountByTokenRepositoryStub } = makeSut()
+
+    const loadByTokenSpy = jest.spyOn(
+      loadAccountByTokenRepositoryStub,
+      'loadByToken'
+    )
+
+    await sut.load(getFakeAccessToken())
+
+    expect(loadByTokenSpy).toHaveBeenCalledWith('fake_decrypted_token')
   })
 })
