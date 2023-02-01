@@ -1,11 +1,11 @@
-import { Validation } from '../../../../presentation/protocols/validation'
+import { Validation } from '../../../../../presentation/protocols/validation'
 import {
   RequiredFieldValidation,
   ValidationComposite
-} from '../../../../validation/validators'
+} from '../../../../../validation/validators'
 import { makeAddPostValidation } from './add-post-validation'
 
-jest.mock('../../../../validation/validators/validation-composite')
+jest.mock('../../../../../validation/validators/validation-composite')
 
 describe('AddPostValidation | Factory', () => {
   it('should call validation-composite with correct validations', () => {
