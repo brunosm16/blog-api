@@ -109,4 +109,12 @@ describe('DbLoadAccountByToken', () => {
 
     expect(response).toEqual(null)
   })
+
+  it('should return account if load-account-by-token-repository succeeds', async () => {
+    const { sut } = makeSut()
+
+    const response = await sut.load(getFakeAccessToken())
+
+    expect(response).toEqual(getFakeAccount())
+  })
 })
