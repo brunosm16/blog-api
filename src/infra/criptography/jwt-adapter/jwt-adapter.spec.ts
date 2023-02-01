@@ -12,21 +12,26 @@ const makeSut = (): JwtAdapter => {
 }
 
 describe('JwtAdapter', () => {
-  it('should call sign with correct values', async () => {
-    const sut = makeSut()
+  describe('.sign', () => {
+    it('should call sign with correct values', async () => {
+      const sut = makeSut()
 
-    const signSpy = jest.spyOn(jwt, 'sign')
+      const signSpy = jest.spyOn(jwt, 'sign')
 
-    await sut.encrypt('fake_password')
+      await sut.encrypt('fake_password')
 
-    expect(signSpy).toHaveBeenCalledWith({ id: 'fake_password' }, 'fake_secret')
-  })
+      expect(signSpy).toHaveBeenCalledWith(
+        { id: 'fake_password' },
+        'fake_secret'
+      )
+    })
 
-  it('should return a accessToken on sign success', async () => {
-    const sut = makeSut()
+    it('should return a accessToken on sign success', async () => {
+      const sut = makeSut()
 
-    const accessToken = await sut.encrypt('fake_password')
+      const accessToken = await sut.encrypt('fake_password')
 
-    expect(accessToken).toEqual('fake_token')
+      expect(accessToken).toEqual('fake_token')
+    })
   })
 })
