@@ -97,4 +97,16 @@ describe('DbLoadAccountByToken', () => {
 
     expect(loadByTokenSpy).toHaveBeenCalledWith('fake_decrypted_token')
   })
+
+  it('should return null if load-account-by-token-repository returns null', async () => {
+    const { sut, loadAccountByTokenRepositoryStub } = makeSut()
+
+    jest
+      .spyOn(loadAccountByTokenRepositoryStub, 'loadByToken')
+      .mockReturnValueOnce(new Promise((resolve) => resolve(null)))
+
+    const response = await sut.load(getFakeAccessToken())
+
+    expect(response).toEqual(null)
+  })
 })
