@@ -26,59 +26,63 @@ jest.mock('bcrypt', () => ({
 }))
 
 describe('BcryptAdapter Tests', () => {
-  it('should call hash with correct values', async () => {
-    const hashSpy = jest.spyOn(bcrypt, 'hash')
-    const fakePassword = 'loremipsum123@#'
+  describe('.hash', () => {
+    it('should call hash with correct values', async () => {
+      const hashSpy = jest.spyOn(bcrypt, 'hash')
+      const fakePassword = 'loremipsum123@#'
 
-    const sut = makeSut(12)
-    await sut.hash(fakePassword)
+      const sut = makeSut(12)
+      await sut.hash(fakePassword)
 
-    expect(hashSpy).toHaveBeenCalledWith(fakePassword, 12)
+      expect(hashSpy).toHaveBeenCalledWith(fakePassword, 12)
+    })
+
+    it('should return a hash on hash success', async () => {
+      const fakePassword = 'loremipsum123@#'
+
+      const sut = makeSut(12)
+      const resultHash = await sut.hash(fakePassword)
+
+      expect(resultHash).toEqual(FAKE_HASH)
+    })
   })
 
-  it('should return a hash on hash success', async () => {
-    const fakePassword = 'loremipsum123@#'
+  describe('.compare', () => {
+    it('should call compare with correct values', async () => {
+      const fakePassword = 'loremipsum123@#'
+      const fakeHash = 'b@8gFygS63Pa'
 
-    const sut = makeSut(12)
-    const resultHash = await sut.hash(fakePassword)
+      const compareSpy = jest.spyOn(bcrypt, 'compare')
 
-    expect(resultHash).toEqual(FAKE_HASH)
-  })
+      const sut = makeSut(12)
+      await sut.compare(fakePassword, fakeHash)
 
-  it('should call compare with correct values', async () => {
-    const fakePassword = 'loremipsum123@#'
-    const fakeHash = 'b@8gFygS63Pa'
+      expect(compareSpy).toHaveBeenCalledWith(fakePassword, fakeHash)
+    })
 
-    const compareSpy = jest.spyOn(bcrypt, 'compare')
+    it('should returns true when comparison succeeds', async () => {
+      const fakePassword = 'loremipsum123@#'
+      const fakeHash = 'b@8gFygS63Pa'
 
-    const sut = makeSut(12)
-    await sut.compare(fakePassword, fakeHash)
+      const sut = makeSut(12)
+      const isValid = await sut.compare(fakePassword, fakeHash)
 
-    expect(compareSpy).toHaveBeenCalledWith(fakePassword, fakeHash)
-  })
+      expect(isValid).toEqual(true)
+    })
 
-  it('should returns true when comparison succeeds', async () => {
-    const fakePassword = 'loremipsum123@#'
-    const fakeHash = 'b@8gFygS63Pa'
+    it('should returns false when comparison fails', async () => {
+      const fakePassword = 'loremipsum123@#'
+      const fakeHash = 'b@8gFygS63Pa'
 
-    const sut = makeSut(12)
-    const isValid = await sut.compare(fakePassword, fakeHash)
+      const sut = makeSut(12)
 
-    expect(isValid).toEqual(true)
-  })
+      jest
+        .spyOn(mockBCrypt, 'compare')
+        .mockReturnValueOnce(new Promise((resolve) => resolve(false)))
 
-  it('should returns false when comparison fails', async () => {
-    const fakePassword = 'loremipsum123@#'
-    const fakeHash = 'b@8gFygS63Pa'
+      const isValid = await sut.compare(fakePassword, fakeHash)
 
-    const sut = makeSut(12)
-
-    jest
-      .spyOn(mockBCrypt, 'compare')
-      .mockReturnValueOnce(new Promise((resolve) => resolve(false)))
-
-    const isValid = await sut.compare(fakePassword, fakeHash)
-
-    expect(isValid).toEqual(false)
+      expect(isValid).toEqual(false)
+    })
   })
 })
