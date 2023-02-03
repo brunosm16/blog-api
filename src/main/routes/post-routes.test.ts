@@ -36,9 +36,9 @@ describe('Post Route Tests', () => {
   })
 
   describe('POST /posts', () => {
-    it('should return 204 on post creation success', async () => {
+    it('should return 403 on post without valid access token', async () => {
       const { body } = getFakeBody()
-      await request(app).post(ADD_POST_URL).send(body).expect(204)
+      await request(app).post(ADD_POST_URL).send(body).expect(403)
     })
   })
 })
