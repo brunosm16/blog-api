@@ -95,4 +95,22 @@ describe('MongoAccountRepository Tests', () => {
       expect(accountResult.accessToken).toEqual('fake_token')
     })
   })
+
+  describe('.loadByToken', () => {
+    it('should return an account by accessToken', async () => {
+      const sut = makeSut()
+
+      const payload = { ...getFakeAccount(), accessToken: 'fake_token' }
+
+      await accountCollection.insertOne(payload)
+
+      const resultAccount = await sut.loadByToken('fake_token')
+
+      expect(resultAccount).toBeTruthy()
+      expect(resultAccount?.id).toBeTruthy()
+      expect(resultAccount?.name).toEqual('lorem-ipsum')
+      expect(resultAccount?.email).toEqual('loremipsum@email.com')
+      expect(resultAccount?.password).toEqual('loremipsum123@#')
+    })
+  })
 })
