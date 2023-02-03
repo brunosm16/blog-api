@@ -19,8 +19,8 @@ const getFakeBody = (): any => ({
 const ADD_POST_URL = '/api/posts'
 
 describe('Post Route Tests', () => {
-  let accountCollection: Collection
-
+  let postsCollection: Collection
+  
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL ?? '')
   })
@@ -30,9 +30,9 @@ describe('Post Route Tests', () => {
   })
 
   beforeEach(async () => {
-    accountCollection = await MongoHelper.getCollectionByName('posts')
+    postsCollection = await MongoHelper.getCollectionByName('posts')
 
-    await accountCollection.deleteMany({})
+    await postsCollection.deleteMany({})
   })
 
   describe('POST /posts', () => {
