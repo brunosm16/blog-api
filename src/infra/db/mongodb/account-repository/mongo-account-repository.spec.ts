@@ -112,5 +112,13 @@ describe('MongoAccountRepository Tests', () => {
       expect(resultAccount?.email).toEqual('loremipsum@email.com')
       expect(resultAccount?.password).toEqual('loremipsum123@#')
     })
+
+    it('should return null if load-by-token fails', async () => {
+      const sut = makeSut()
+
+      const resultAccount = await sut.loadByToken('fake_token')
+
+      expect(resultAccount).toEqual(null)
+    })
   })
 })
