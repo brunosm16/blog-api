@@ -120,5 +120,21 @@ describe('MongoAccountRepository Tests', () => {
 
       expect(resultAccount).toEqual(null)
     })
+
+    it('should return an account on load-by-token when role is provided', async () => {
+      const sut = makeSut()
+
+      const payload = { ...getFakeAccount(), accessToken: 'fake_token', role: 'fake_role' }
+
+      await accountCollection.insertOne(payload)
+
+      const resultAccount = await sut.loadByToken('fake_token', 'fake_role')
+
+      expect(resultAccount).toBeTruthy()
+      expect(resultAccount?.id).toBeTruthy()
+      expect(resultAccount?.name).toEqual('lorem-ipsum')
+      expect(resultAccount?.email).toEqual('loremipsum@email.com')
+      expect(resultAccount?.password).toEqual('loremipsum123@#')
+    })
   })
 })
