@@ -124,7 +124,11 @@ describe('MongoAccountRepository Tests', () => {
     it('should return an account on load-by-token when role is provided', async () => {
       const sut = makeSut()
 
-      const payload = { ...getFakeAccount(), accessToken: 'fake_token', role: 'fake_role' }
+      const payload = {
+        ...getFakeAccount(),
+        accessToken: 'fake_token',
+        role: 'fake_role'
+      }
 
       await accountCollection.insertOne(payload)
 
@@ -135,6 +139,51 @@ describe('MongoAccountRepository Tests', () => {
       expect(resultAccount?.name).toEqual('lorem-ipsum')
       expect(resultAccount?.email).toEqual('loremipsum@email.com')
       expect(resultAccount?.password).toEqual('loremipsum123@#')
+    })
+
+    it('should return an account on load-by-token when role admin is provided', async () => {
+      const sut = makeSut()
+
+      const payload = {
+        ...getFakeAccount(),
+        accessToken: 'fake_token',
+        role: 'admin'
+      }
+
+      await accountCollection.insertOne(payload)
+
+      const resultAccount = await sut.loadByToken('fake_token', 'admin')
+
+      expect(resultAccount).toBeTruthy()
+      expect(resultAccount?.id).toBeTruthy()
+      expect(resultAccount?.name).toEqual('lorem-ipsum')
+      expect(resultAccount?.email).toEqual('loremipsum@email.com')
+      expect(resultAccount?.password).toEqual('loremipsum123@#')
+    })
+
+    it('should return null if role is invalid', async () => {
+      const sut = makeSut()
+
+      const result = await accountCollection.insertOne({
+        accessToken: 'fake_token',
+        ...getFakeAccount()
+      })
+
+      const id = result.ops[0]._id
+      const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+
+      await accountCollection.updateOne(
+        { _id: id },
+        {
+          $set: {
+            accessToken
+          }
+        }
+      )
+
+      const resultAccount = await sut.loadByToken('fake_token', 'admin')
+
+      expect(resultAccount).toBeFalsy()
     })
   })
 })

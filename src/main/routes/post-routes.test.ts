@@ -53,7 +53,8 @@ describe('Post Route Tests', () => {
         name: 'lorem-ipsum',
         email: 'loremipsum@email.com',
         password: 'fake_hashed_password',
-        role: 'admin'
+        role: 'admin',
+        accessToken: 'fake_token'
       }
 
       const result = await accountsCollection.insertOne({ user })

@@ -95,7 +95,7 @@ describe('DbLoadAccountByToken', () => {
 
     await sut.load(getFakeAccessToken())
 
-    expect(loadByTokenSpy).toHaveBeenCalledWith('fake_decrypted_token')
+    expect(loadByTokenSpy).toHaveBeenCalledWith('fake_access_token', undefined)
   })
 
   it('should return null if load-account-by-token-repository returns null', async () => {
