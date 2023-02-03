@@ -58,8 +58,6 @@ implements
   ): Promise<AccountModel | null> {
     const collection = await this.getAccountsCollection()
 
-    console.log(console.log(await collection.findOne({})))
-
     const account = await collection.findOne(
       {
         accessToken: token
@@ -75,8 +73,6 @@ implements
         ]
       }
     )
-
-    console.log(account)
 
     if (!account) return null
 
