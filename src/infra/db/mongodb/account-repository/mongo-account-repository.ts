@@ -58,10 +58,25 @@ implements
   ): Promise<AccountModel | null> {
     const collection = await this.getAccountsCollection()
 
+    console.log(console.log(await collection.findOne({})))
+
     const account = await collection.findOne(
-      { accessToken: token },
-      { $or: [{ role }, { role: 'admin' }] }
+      {
+        accessToken: token
+      },
+      {
+        $or: [
+          {
+            role
+          },
+          {
+            role: 'admin'
+          }
+        ]
+      }
     )
+
+    console.log(account)
 
     if (!account) return null
 
