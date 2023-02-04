@@ -1,3 +1,4 @@
+import MockDate from 'mockdate'
 import { AddPostController } from './add-post-controller'
 import { HttpRequest } from './add-post-controller-protocols'
 import { Validation } from '../../../protocols/validation'
@@ -22,7 +23,8 @@ const getFakeRequest = (): HttpRequest => ({
         image: 'fake_image',
         answer: 'fake_answer'
       }
-    ]
+    ],
+    date: new Date()
   }
 })
 
@@ -60,6 +62,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('AddPost', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   it('should call validate with correct values', async () => {
     const { sut, validationStub } = makeSut()
 
@@ -89,9 +99,9 @@ describe('AddPost', () => {
 
     await sut.handle(getFakeRequest())
 
-    const { question, answers } = getFakeRequest().body
+    const { question, answers, date } = getFakeRequest().body
 
-    expect(addPostSpy).toHaveBeenCalledWith({ question, answers })
+    expect(addPostSpy).toHaveBeenCalledWith({ question, answers, date })
   })
 
   it('should return 500 if add-post throws', async () => {

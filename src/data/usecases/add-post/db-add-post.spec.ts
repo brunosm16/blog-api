@@ -1,4 +1,5 @@
 import { PostModel } from '../../../domain/models/post'
+import MockDate from 'mockdate'
 import { AddPostModel } from '../../../domain/usecases/add-post'
 import { AddPostRepository } from '../../protocols/db/post/add-post-repository'
 import { DbAddPost } from './db-add-post'
@@ -16,7 +17,8 @@ const getFakePost = (): PostModel => ({
       image: 'fake_image',
       answer: 'fake_answer'
     }
-  ]
+  ],
+  date: new Date()
 })
 
 const makeAddPostRepositoryStub = (): AddPostRepository => {
@@ -40,6 +42,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbAddPost ', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   it('should call addPostRepository witch correct values', async () => {
     const { sut, addPostRepositoryStub } = makeSut()
 

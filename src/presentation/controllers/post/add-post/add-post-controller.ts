@@ -27,9 +27,9 @@ export class AddPostController implements Controller {
         return makeBadRequest(new Error())
       }
 
-      const { question, answers } = body
+      const { question, answers, date } = body
 
-      await this.addPost.add({ question, answers })
+      await this.addPost.add({ question, answers, date })
 
       return makeNoContentRequest()
     } catch (err) {

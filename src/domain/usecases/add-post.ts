@@ -1,6 +1,7 @@
 export interface AddPostModel {
   question: string
   answers: PostAnswer[]
+  date: Date
 }
 
 export interface PostAnswer {

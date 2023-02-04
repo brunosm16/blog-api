@@ -4,4 +4,5 @@ export interface PostModel {
   id: string
   question: string
   answers: PostAnswer[]
+  date: Date
 }

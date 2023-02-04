@@ -1,4 +1,5 @@
 import { Collection } from 'mongodb'
+import MockDate from 'mockdate'
 import { AddPostModel } from '../../../../domain/usecases/add-post'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { MongoPostRepository } from './mongo-post-repository'
@@ -14,7 +15,8 @@ const getFakePost = (): AddPostModel => ({
       image: 'fake_image',
       answer: 'fake_answer'
     }
-  ]
+  ],
+  date: new Date()
 })
 
 const makeSut = (): SutTypes => {
@@ -28,10 +30,12 @@ describe('MongoPostRepository', () => {
 
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL ?? '')
+    MockDate.set(new Date())
   })
 
   afterAll(async () => {
     await MongoHelper.disconnect()
+    MockDate.reset()
   })
 
   beforeEach(async () => {
