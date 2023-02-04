@@ -1,12 +1,9 @@
+import { PostAnswer } from '../models/post'
+
 export interface AddPostModel {
   question: string
-  answers: PostAnswer[]
+  answers: PostAnswer
   date: Date
-}
-
-export interface PostAnswer {
-  image?: string
-  answer: string
 }
 
 export interface AddPost {
