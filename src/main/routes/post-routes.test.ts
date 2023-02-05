@@ -18,7 +18,7 @@ const getFakeBody = (): any => ({
   }
 })
 
-const ADD_POST_URL = '/api/posts'
+const POSTS_URL = '/api/posts'
 
 describe('Post Route Tests', () => {
   let postsCollection: Collection
@@ -43,7 +43,7 @@ describe('Post Route Tests', () => {
   describe('POST /posts', () => {
     it('should return 403 on post without valid access token', async () => {
       const { body } = getFakeBody()
-      await request(app).post(ADD_POST_URL).send(body).expect(403)
+      await request(app).post(POSTS_URL).send(body).expect(403)
     })
 
     it('should return 204 on add-post success', async () => {
@@ -71,10 +71,16 @@ describe('Post Route Tests', () => {
       )
 
       await request(app)
-        .post(ADD_POST_URL)
+        .post(POSTS_URL)
         .set('x-access-token', accessToken)
         .send(body)
         .expect(204)
+    })
+  })
+
+  describe('GET /posts', () => {
+    it('shoudl return 403 on load posts without access-token', async () => {
+      await request(app).get(POSTS_URL).expect(403)
     })
   })
 })
