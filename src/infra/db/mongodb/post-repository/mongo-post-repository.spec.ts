@@ -82,5 +82,13 @@ describe('MongoPostRepository', () => {
       expect(posts[0].question).toEqual('fake_question')
       expect(posts[1].question).toEqual('fake_question_2')
     })
+
+    it('should return an empty array if there are no posts', async () => {
+      const { sut } = makeSut()
+
+      const posts = await sut.loadAll()
+
+      expect(posts.length).toEqual(0)
+    })
   })
 })
