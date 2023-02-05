@@ -1,3 +1,4 @@
+import MockDate from 'mockdate'
 import { PostModel } from '../../../../domain/models/post'
 import { LoadPostsController } from './load-posts-controller'
 import { LoadPosts, HttpRequest } from './load-posts-controller-protocols'
@@ -61,6 +62,13 @@ const makeSut = (): SutTypes => {
 }
 
 describe('LoadPostsController', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   it('should call load-posts use case', async () => {
     const { sut, loadPostsStub } = makeSut()
 
