@@ -44,13 +44,15 @@ describe('MongoPostRepository', () => {
     await postCollection.deleteMany({})
   })
 
-  it('should add a new post on add-post success', async () => {
-    const { sut } = makeSut()
+  describe('.add', () => {
+    it('should add a new post on add-post success', async () => {
+      const { sut } = makeSut()
 
-    await sut.add(getFakePost())
+      await sut.add(getFakePost())
 
-    const result = await postCollection.findOne({ question: 'fake_question' })
+      const result = await postCollection.findOne({ question: 'fake_question' })
 
-    expect(result).toBeTruthy()
+      expect(result).toBeTruthy()
+    })
   })
 })
