@@ -88,5 +88,14 @@ describe('Post Route Tests', () => {
     it('should return 403 on load posts without access-token', async () => {
       await request(app).get(POSTS_URL).expect(403)
     })
+
+    it('should return 204 on load posts with access-token', async () => {
+      const accessToken = await makeFakeAccessToken()
+
+      await request(app)
+        .get(POSTS_URL)
+        .set('x-access-token', accessToken)
+        .expect(204)
+    })
   })
 })
