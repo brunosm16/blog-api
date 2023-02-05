@@ -1,7 +1,11 @@
 import MockDate from 'mockdate'
 import { PostModel } from '../../../../domain/models/post'
 import { LoadPostsController } from './load-posts-controller'
-import { LoadPosts, HttpRequest } from './load-posts-controller-protocols'
+import {
+  LoadPosts,
+  HttpRequest,
+  makeOKRequest
+} from './load-posts-controller-protocols'
 
 interface SutTypes {
   sut: LoadPostsController
@@ -77,5 +81,15 @@ describe('LoadPostsController', () => {
     await sut.handle(getFakeRequest())
 
     expect(loadPostsSpy).toHaveBeenCalled()
+  })
+
+  it('should return 200 on load-posts success', async () => {
+    const { sut } = makeSut()
+
+    const response = await sut.handle(getFakeRequest())
+
+    const posts = makeFakePosts()
+
+    expect(response).toEqual(makeOKRequest(posts))
   })
 })
