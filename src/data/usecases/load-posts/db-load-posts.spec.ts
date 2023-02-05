@@ -64,4 +64,12 @@ describe('DbLoadPosts Repository', () => {
 
     expect(loadAllSpy).toHaveBeenCalled()
   })
+
+  it('should return a list of posts on load-posts-repository success', async () => {
+    const { sut } = makeSut()
+
+    const result = await sut.load()
+
+    expect(result).toEqual(makeFakePosts())
+  })
 })
