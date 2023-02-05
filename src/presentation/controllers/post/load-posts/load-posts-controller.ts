@@ -10,8 +10,8 @@ export class LoadPostsController implements Controller {
   constructor (private readonly loadPosts: LoadPosts) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    await this.loadPosts.load()
+    const posts = await this.loadPosts.load()
 
-    return await new Promise((resolve) => resolve(makeOKRequest({})))
+    return makeOKRequest(posts)
   }
 }
