@@ -4,7 +4,8 @@ import {
   HttpRequest,
   makeOKRequest,
   LoadPosts,
-  makeInternalServerError
+  makeInternalServerError,
+  makeNoContentRequest
 } from './load-posts-controller-protocols'
 
 export class LoadPostsController implements Controller {
@@ -13,6 +14,8 @@ export class LoadPostsController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const posts = await this.loadPosts.load()
+
+      if (!posts.length) return makeNoContentRequest()
 
       return makeOKRequest(posts)
     } catch (err) {
