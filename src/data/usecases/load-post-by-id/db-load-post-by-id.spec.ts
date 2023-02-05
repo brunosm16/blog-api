@@ -1,6 +1,9 @@
-import { LoadPostByIdRepository } from '@/data/protocols/db/post/load-post-by-id-repository'
-import { PostModel } from '@/domain/models/post'
+import MockDate from 'mockdate'
 import { DbLoadPostById } from './db-load-post-by-id'
+import {
+  LoadPostByIdRepository,
+  PostModel
+} from './db-load-post-by-id-protocols'
 
 type SutTypes = {
   sut: DbLoadPostById
@@ -41,6 +44,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbLoadPostById', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   it('should call load-post-by-id-repository', async () => {
     const { sut, loadPostByIdRepositoryStub } = makeSut()
 

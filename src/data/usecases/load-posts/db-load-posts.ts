@@ -1,6 +1,8 @@
-import { PostModel } from '../../../domain/models/post'
-import { LoadPosts } from '../../../domain/usecases/load-posts'
-import { LoadPostsRepository } from '../../protocols/db/post/load-posts-repository'
+import {
+  PostModel,
+  LoadPosts,
+  LoadPostsRepository
+} from './db-load-posts.protocols'
 
 export class DbLoadPosts implements LoadPosts {
   constructor (private readonly loadPostsRepository: LoadPostsRepository) {}

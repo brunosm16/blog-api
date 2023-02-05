@@ -1,7 +1,7 @@
 import MockDate from 'mockdate'
-import { PostModel } from '../../../domain/models/post'
-import { LoadPostsRepository } from '../../protocols/db/post/load-posts-repository'
 import { DbLoadPosts } from './db-load-posts'
+
+import { PostModel, LoadPostsRepository } from './db-load-posts.protocols'
 
 interface SutTypes {
   sut: DbLoadPosts

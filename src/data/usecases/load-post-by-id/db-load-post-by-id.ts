@@ -1,6 +1,8 @@
-import { LoadPostByIdRepository } from '@/data/protocols/db/post/load-post-by-id-repository'
-import { PostModel } from '@/domain/models/post'
-import { LoadPostById } from '@/domain/usecases/load-post-by-id'
+import {
+  LoadPostByIdRepository,
+  PostModel,
+  LoadPostById
+} from './db-load-post-by-id-protocols'
 
 export class DbLoadPostById implements LoadPostById {
   constructor (
