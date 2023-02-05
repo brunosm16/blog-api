@@ -20,6 +20,9 @@ const makePost = async (): Promise<any> => {
       {
         image: 'any_image',
         answer: 'any_answer'
+      },
+      {
+        answer: 'fake_answer_2'
       }
     ],
     date: new Date()
@@ -77,5 +80,34 @@ describe('MongoPostResultRepository', () => {
     expect(result).toBeTruthy()
     expect(result.id).toBeTruthy()
     expect(result.answer).toEqual(answer)
+  })
+
+  it('should update an post-result on save success', async () => {
+    const { answers, _id: postId } = await makePost()
+
+    const { _id: accountId } = await makeAccount()
+
+    const answer = answers[0].answer
+
+    const postResultsArgs = {
+      postId,
+      accountId,
+      answer,
+      date: new Date()
+    }
+
+    const res = await postResultsCollection.insertOne(postResultsArgs)
+
+    const { sut } = makeSut()
+
+    const result = await sut.save({
+      ...postResultsArgs,
+      answer: answers[1].answer
+    })
+
+    expect(result).toBeTruthy()
+    expect(result.id).toBeTruthy()
+    expect(result.id).toEqual(res.ops[0]._id)
+    expect(result.answer).toEqual(answers[1].answer)
   })
 })
