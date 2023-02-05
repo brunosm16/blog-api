@@ -1,10 +1,11 @@
 import MockDate from 'mockdate'
-import { PostModel } from '../../../../domain/models/post'
 import { LoadPostsController } from './load-posts-controller'
 import {
   LoadPosts,
   HttpRequest,
-  makeOKRequest
+  makeOKRequest,
+  PostModel,
+  makeInternalServerError
 } from './load-posts-controller-protocols'
 
 interface SutTypes {
@@ -91,5 +92,19 @@ describe('LoadPostsController', () => {
     const posts = makeFakePosts()
 
     expect(response).toEqual(makeOKRequest(posts))
+  })
+
+  it('should throws if load-posts throws', async () => {
+    const { sut, loadPostsStub } = makeSut()
+
+    jest
+      .spyOn(loadPostsStub, 'load')
+      .mockReturnValueOnce(
+        new Promise((resolve, reject) => reject(new Error()))
+      )
+
+    const response = await sut.handle(getFakeRequest())
+
+    expect(response).toEqual(makeInternalServerError(new Error()))
   })
 })
