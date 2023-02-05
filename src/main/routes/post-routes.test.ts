@@ -1,6 +1,7 @@
 import { sign } from 'jsonwebtoken'
 import { Collection } from 'mongodb'
 import request from 'supertest'
+import { AddPostModel } from '../../domain/usecases/add-post'
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
 import app from '../config/app'
 import env from '../config/env'
@@ -17,6 +18,29 @@ const getFakeBody = (): any => ({
     ]
   }
 })
+
+const getFakePosts = (): AddPostModel[] => [
+  {
+    question: 'fake_question',
+    answers: [
+      {
+        image: 'fake_image',
+        answer: 'fake_answer'
+      }
+    ],
+    date: new Date()
+  },
+  {
+    question: 'fake_question_2',
+    answers: [
+      {
+        image: 'fake_image_2',
+        answer: 'fake_answer_2'
+      }
+    ],
+    date: new Date()
+  }
+]
 
 const POSTS_URL = '/api/posts'
 
@@ -96,6 +120,17 @@ describe('Post Route Tests', () => {
         .get(POSTS_URL)
         .set('x-access-token', accessToken)
         .expect(204)
+    })
+
+    it('should return 200 on load posts with success', async () => {
+      const accessToken = await makeFakeAccessToken()
+
+      await postsCollection.insertMany(getFakePosts())
+
+      await request(app)
+        .get(POSTS_URL)
+        .set('x-access-token', accessToken)
+        .expect(200)
     })
   })
 })
