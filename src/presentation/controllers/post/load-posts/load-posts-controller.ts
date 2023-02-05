@@ -3,15 +3,20 @@ import {
   HttpResponse,
   HttpRequest,
   makeOKRequest,
-  LoadPosts
+  LoadPosts,
+  makeInternalServerError
 } from './load-posts-controller-protocols'
 
 export class LoadPostsController implements Controller {
   constructor (private readonly loadPosts: LoadPosts) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    const posts = await this.loadPosts.load()
+    try {
+      const posts = await this.loadPosts.load()
 
-    return makeOKRequest(posts)
+      return makeOKRequest(posts)
+    } catch (err) {
+      return makeInternalServerError(err)
+    }
   }
 }
