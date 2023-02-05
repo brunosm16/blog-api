@@ -24,6 +24,31 @@ describe('Post Route Tests', () => {
   let postsCollection: Collection
   let accountsCollection: Collection
 
+  const makeFakeAccessToken = async (): Promise<string> => {
+    const user = {
+      name: 'lorem-ipsum',
+      email: 'loremipsum@email.com',
+      password: 'fake_hashed_password',
+      role: 'admin',
+      accessToken: 'fake_token'
+    }
+
+    const result = await accountsCollection.insertOne({ user })
+    const id = result.ops[0]._id
+    const accessToken = sign({ id }, env.jwtSecret)
+
+    await accountsCollection.updateOne(
+      { _id: id },
+      {
+        $set: {
+          accessToken
+        }
+      }
+    )
+
+    return accessToken
+  }
+
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL ?? '')
   })
@@ -49,26 +74,7 @@ describe('Post Route Tests', () => {
     it('should return 204 on add-post success', async () => {
       const { body } = getFakeBody()
 
-      const user = {
-        name: 'lorem-ipsum',
-        email: 'loremipsum@email.com',
-        password: 'fake_hashed_password',
-        role: 'admin',
-        accessToken: 'fake_token'
-      }
-
-      const result = await accountsCollection.insertOne({ user })
-      const id = result.ops[0]._id
-      const accessToken = sign({ id }, env.jwtSecret)
-
-      await accountsCollection.updateOne(
-        { _id: id },
-        {
-          $set: {
-            accessToken
-          }
-        }
-      )
+      const accessToken = await makeFakeAccessToken()
 
       await request(app)
         .post(POSTS_URL)
@@ -79,7 +85,7 @@ describe('Post Route Tests', () => {
   })
 
   describe('GET /posts', () => {
-    it('shoudl return 403 on load posts without access-token', async () => {
+    it('should return 403 on load posts without access-token', async () => {
       await request(app).get(POSTS_URL).expect(403)
     })
   })
