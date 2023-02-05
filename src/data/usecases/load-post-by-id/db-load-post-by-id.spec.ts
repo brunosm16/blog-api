@@ -49,5 +49,14 @@ describe('DbLoadPostById', () => {
     await sut.loadById('fake_id')
 
     expect(loadByIdSpy).toHaveBeenCalled()
+    expect(loadByIdSpy).toHaveBeenCalledWith('fake_id')
+  })
+
+  it('should return a post on success', async () => {
+    const { sut } = makeSut()
+
+    const result = await sut.loadById('fake_id')
+
+    expect(result).toEqual(makeFakePost())
   })
 })
