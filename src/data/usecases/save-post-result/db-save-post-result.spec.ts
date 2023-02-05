@@ -59,4 +59,12 @@ describe('DbSavePostResult', () => {
 
     expect(saveSpy).toHaveBeenCalled()
   })
+
+  it('should return a post on db-save-post-result', async () => {
+    const { sut } = makeSut()
+
+    const result = await sut.save(makeFakePostResultModel())
+
+    expect(result).toEqual(makeFakePostResultModel())
+  })
 })
