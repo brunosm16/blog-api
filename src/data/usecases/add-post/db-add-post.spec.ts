@@ -12,12 +12,10 @@ interface SutTypes {
 const getFakePost = (): PostModel => ({
   id: 'fake_id',
   question: 'fake_question',
-  answers: [
-    {
-      image: 'fake_image',
-      answer: 'fake_answer'
-    }
-  ],
+  answers: [{
+    image: 'any_image',
+    answer: 'any_answer'
+  }],
   date: new Date()
 })
 
