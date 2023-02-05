@@ -5,7 +5,8 @@ import {
   HttpRequest,
   makeOKRequest,
   PostModel,
-  makeInternalServerError
+  makeInternalServerError,
+  makeNoContentRequest
 } from './load-posts-controller-protocols'
 
 interface SutTypes {
@@ -106,5 +107,17 @@ describe('LoadPostsController', () => {
     const response = await sut.handle(getFakeRequest())
 
     expect(response).toEqual(makeInternalServerError(new Error()))
+  })
+
+  it('should return 204 if no posts found', async () => {
+    const { sut, loadPostsStub } = makeSut()
+
+    jest
+      .spyOn(loadPostsStub, 'load')
+      .mockReturnValueOnce(new Promise((resolve) => resolve([])))
+
+    const response = await sut.handle(getFakeRequest())
+
+    expect(response).toEqual(makeNoContentRequest())
   })
 })
