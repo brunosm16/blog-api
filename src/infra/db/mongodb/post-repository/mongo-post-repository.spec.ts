@@ -91,4 +91,20 @@ describe('MongoPostRepository', () => {
       expect(posts.length).toEqual(0)
     })
   })
+
+  describe('.loadById', () => {
+    it('should return a post on success', async () => {
+      const { sut } = makeSut()
+
+      const post = getFakePosts()[0]
+
+      const result = await postCollection.insertOne({ post })
+
+      const id = result.ops[0]._id
+
+      const foundPost = await sut.loadById(id)
+
+      expect(foundPost).toBeTruthy()
+    })
+  })
 })
