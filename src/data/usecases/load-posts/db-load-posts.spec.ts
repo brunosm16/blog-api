@@ -1,3 +1,4 @@
+import MockDate from 'mockdate'
 import { PostModel } from '../../../domain/models/post'
 import { LoadPostsRepository } from '../../protocols/db/post/load-posts-repository'
 import { DbLoadPosts } from './db-load-posts'
@@ -55,6 +56,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbLoadPosts Repository', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   it('should call load-posts-repository', async () => {
     const { sut, loadPostsRepositoryStub } = makeSut()
 
