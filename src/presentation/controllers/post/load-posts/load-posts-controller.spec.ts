@@ -43,7 +43,7 @@ const getFakeRequest = (): HttpRequest => ({
 
 const makeLoadPosts = (): LoadPosts => {
   class LoadPostsStub implements LoadPosts {
-    async load(): Promise<PostModel[]> {
+    async load (): Promise<PostModel[]> {
       return await new Promise((resolve) => resolve(makeFakePosts()))
     }
   }
