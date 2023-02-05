@@ -1,3 +1,4 @@
+import MockDate from 'mockdate'
 import { DbSavePostResult } from './db-save-post-result'
 import {
   SavePostResultRepository,
@@ -41,6 +42,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbSavePostResult', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   it('should call save on db-save-post-result', async () => {
     const { sut, savePostResultRepositoryStub } = makeSut()
 
