@@ -1,6 +1,9 @@
-import { HttpRequest, LoadPostById } from './post-result-controller-protocols'
+import {
+  HttpRequest,
+  LoadPostById,
+  PostModel
+} from './post-result-controller-protocols'
 import { PostResultController } from './post-result-controller'
-import { PostModel } from '../post/load-posts/load-posts-controller-protocols'
 
 const mockHttpRequest = (): HttpRequest => ({
   params: {
