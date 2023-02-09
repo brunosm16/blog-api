@@ -5,7 +5,10 @@ import {
   makeForbiddenError
 } from './post-result-controller-protocols'
 import { PostResultController } from './post-result-controller'
-import { InvalidParamError } from '../post/load-posts/load-posts-controller-protocols'
+import {
+  InvalidParamError,
+  makeInternalServerError
+} from '../post/load-posts/load-posts-controller-protocols'
 
 const mockHttpRequest = (): HttpRequest => ({
   params: {
@@ -73,5 +76,19 @@ describe('PostResultController', () => {
     expect(response).toEqual(
       makeForbiddenError(new InvalidParamError('postId'))
     )
+  })
+
+  it('should return 500 if load-by-id throws', async () => {
+    const { sut, loadPostByIdStub } = makeSut()
+
+    jest
+      .spyOn(loadPostByIdStub, 'loadById')
+      .mockReturnValueOnce(
+        new Promise((resolve, reject) => reject(new Error()))
+      )
+
+    const response = await sut.handle(mockHttpRequest())
+
+    expect(response).toEqual(makeInternalServerError(new Error()))
   })
 })
