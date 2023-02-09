@@ -91,4 +91,23 @@ describe('PostResultController', () => {
 
     expect(response).toEqual(makeInternalServerError(new Error()))
   })
+
+  it('should return 403 if answer is invalid', async () => {
+    const { sut } = makeSut()
+
+    const fakeRequest = {
+      params: {
+        id: 'fake_id'
+      },
+      body: {
+        answer: 'fake_answer_non_existent'
+      }
+    }
+
+    const response = await sut.handle(fakeRequest)
+
+    expect(response).toEqual(
+      makeForbiddenError(new InvalidParamError('answer'))
+    )
+  })
 })
