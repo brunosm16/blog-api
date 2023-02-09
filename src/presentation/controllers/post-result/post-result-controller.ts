@@ -1,4 +1,7 @@
-import { InvalidParamError } from '../post/load-posts/load-posts-controller-protocols'
+import {
+  InvalidParamError,
+  makeInternalServerError
+} from '../post/load-posts/load-posts-controller-protocols'
 import {
   Controller,
   HttpRequest,
@@ -12,14 +15,18 @@ export class PostResultController implements Controller {
   constructor (private readonly loadPostById: LoadPostById) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    const { params } = httpRequest
+    try {
+      const { params } = httpRequest
 
-    const post = await this.loadPostById.loadById(params.id)
+      const post = await this.loadPostById.loadById(params.id)
 
-    if (!post) {
-      return makeForbiddenError(new InvalidParamError('postId'))
+      if (!post) {
+        return makeForbiddenError(new InvalidParamError('postId'))
+      }
+
+      return makeOKRequest(post)
+    } catch (err) {
+      return makeInternalServerError(err)
     }
-
-    return makeOKRequest(post)
   }
 }
