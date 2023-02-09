@@ -1,9 +1,11 @@
 import {
   HttpRequest,
   LoadPostById,
-  PostModel
+  PostModel,
+  makeForbiddenError
 } from './post-result-controller-protocols'
 import { PostResultController } from './post-result-controller'
+import { InvalidParamError } from '../post/load-posts/load-posts-controller-protocols'
 
 const mockHttpRequest = (): HttpRequest => ({
   params: {
@@ -57,5 +59,19 @@ describe('PostResultController', () => {
     await sut.handle(mockHttpRequest())
 
     expect(loadByIdSpy).toHaveBeenCalledWith('fake_id')
+  })
+
+  it('should return 403 if post not found', async () => {
+    const { sut, loadPostByIdStub } = makeSut()
+
+    jest
+      .spyOn(loadPostByIdStub, 'loadById')
+      .mockReturnValueOnce(new Promise((resolve) => resolve(null)))
+
+    const response = await sut.handle(mockHttpRequest())
+
+    expect(response).toEqual(
+      makeForbiddenError(new InvalidParamError('postId'))
+    )
   })
 })
