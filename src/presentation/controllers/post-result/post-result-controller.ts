@@ -1,3 +1,4 @@
+import { SavePostResult } from '@/domain/usecases/save-post-result'
 import {
   InvalidParamError,
   makeInternalServerError,
@@ -13,7 +14,10 @@ import {
 } from './post-result-controller-protocols'
 
 export class PostResultController implements Controller {
-  constructor (private readonly loadPostById: LoadPostById) {}
+  constructor (
+    private readonly loadPostById: LoadPostById,
+    private readonly savePostResult: SavePostResult
+  ) {}
 
   validateAnswer (post: PostModel | null, answer: string | null): Error | null {
     if (!post) {
@@ -31,15 +35,26 @@ export class PostResultController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const { params, body } = httpRequest
+      const { params, body, accountId } = httpRequest
 
-      const post = await this.loadPostById.loadById(params.id)
+      const { postId } = params
 
-      const error = this.validateAnswer(post, body?.answer)
+      const { answer } = body
+
+      const post = await this.loadPostById.loadById(postId)
+
+      const error = this.validateAnswer(post, answer)
 
       if (error) {
         return makeForbiddenError(error)
       }
+
+      await this.savePostResult.save({
+        answer,
+        postId,
+        accountId,
+        date: new Date()
+      })
 
       return makeOKRequest(post)
     } catch (err) {
